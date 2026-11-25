@@ -1,6 +1,7 @@
 rules_version = '2';
 // Lingo Planet academy admin system - security rules
-// Access needs ALL of: Google sign-in (verified) + owner email or listed admin + system password session (12h)
+// Access needs ALL of: Google sign-in (verified) + owner email or listed admin + system password
+// entered during THIS sign-in (session is bound to the sign-in's auth_time; a new sign-in anywhere must enter it again)
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -14,9 +15,9 @@ service cloud.firestore {
     function isAdminId() {
       return signedIn() && exists(/databases/$(database)/documents/admins/$(myEmail()));
     }
+    function sid() { return request.auth.uid + '_' + string(request.auth.token.auth_time); }
     function unlocked() {
-      let s = /databases/$(database)/documents/sessions/$(request.auth.uid);
-      return exists(s) && get(s).data.at > request.time - duration.value(12, 'h');
+      return exists(/databases/$(database)/documents/sessions/$(sid()));
     }
     function isOwner() { return isOwnerId() && unlocked(); }
     function isStaff() { return (isOwnerId() || isAdminId()) && unlocked(); }
@@ -26,16 +27,16 @@ service cloud.firestore {
     }
 
     // System-password sessions: created only with the correct password, never readable
-    match /sessions/{uid} {
+    match /sessions/{sessionId} {
       allow read: if false;
-      allow create, update: if signedIn() && request.auth.uid == uid
+      allow create, update: if signedIn() && sessionId == sid()
         && request.resource.data.keys().hasOnly(['key', 'at'])
         && request.resource.data.at == request.time
         && request.resource.data.key is string
         && request.resource.data.key.size() == 64
         && ((isOwnerId() && keyOk('owner', request.resource.data.key))
             || (isAdminId() && keyOk('staff', request.resource.data.key)));
-      allow delete: if signedIn() && request.auth.uid == uid;
+      allow delete: if signedIn() && sessionId == sid();
     }
 
     // Password hashes: nobody can read them; owner sets them (first owner one once, changes need an unlocked session)

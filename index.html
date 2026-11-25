@@ -320,8 +320,9 @@ async function makeFirebaseDB(){
   const D = (p, id) => fs.doc(db, ...p.split('/'), id);
   return {
     mode:'firebase', auth, au,
-    async openSession(uid, key){ await fs.setDoc(D('sessions', uid), {key, at: fs.serverTimestamp()}); },
-    async closeSession(uid){ try { await fs.deleteDoc(D('sessions', uid)); } catch(e){} },
+    async sessionId(){ const t = await auth.currentUser.getIdTokenResult(); return auth.currentUser.uid + '_' + t.claims.auth_time; },
+    async openSession(key){ await fs.setDoc(D('sessions', await this.sessionId()), {key, at: fs.serverTimestamp()}); },
+    async closeSession(){ try { await fs.deleteDoc(D('sessions', await this.sessionId())); } catch(e){} },
     watch(path, cb){
       return fs.onSnapshot(C(path), snap => { const o = {}; snap.forEach(d => o[d.id] = d.data()); cb(o); },
         err => { console.error(err); if (err.code === 'permission-denied' && S.user && S.user.uid){ if (!relockTimer) relockTimer = setTimeout(() => { relockTimer = null; stopAll(); gateFlow(); }, 300); } else toast('مشكلة في الاتصال بقاعدة البيانات (' + err.code + ')', 'err'); });
@@ -405,7 +406,7 @@ async function gateFlow(){
 }
 function renderGate(mode, err=''){
   const t = {
-    create: ['اعمل باسورد النظام', 'دي باسورد تانية غير الـ Gmail. حتى لو حد دخل بحسابك، مش هيقدر يفتح النظام من غيرها. خليها 12 حرف على الأقل، واكتبها على ورقة في مكان آمن.'],
+    create: ['اعمل باسورد النظام', 'دي باسورد تانية غير الـ Gmail. حتى لو حد دخل بحسابك، مش هيقدر يفتح النظام من غيرها. خليها 12 حرف على الأقل، واكتبها على ورقة في مكان آمن. محدش يقدر يرجعهالك لو نسيتها.'],
     enter: ['باسورد النظام', S.role === 'owner' ? 'اكتب باسورد النظام بتاعتك.' : 'اكتب باسورد الأدمنز اللي المالك إداهالك.'],
     wait: ['لسه مفيش باسورد للأدمنز', 'المالك لازم يعمل باسورد الأدمنز من الإعدادات الأول، وبعدين يديهالك.']
   }[mode];
@@ -442,7 +443,7 @@ async function submitGate(mode){
   gateBusy = true;
   try {
     if (mode === 'create') await setGate('owner', pw);
-    await DB.openSession(S.user.uid, await sha256hex(GATE_SALT + pw));
+    await DB.openSession(await sha256hex(GATE_SALT + pw));
     gateBusy = false; startApp();
   } catch(e){
     gateBusy = false; console.error(e);
@@ -455,7 +456,7 @@ async function changeGate(role){
   if (a !== b){ toast('الباسوردين مش زي بعض', 'err'); return; }
   await safe(async () => {
     await setGate(role, a);
-    if (role === 'owner') await DB.openSession(S.user.uid, await sha256hex(GATE_SALT + a));
+    if (role === 'owner') await DB.openSession(await sha256hex(GATE_SALT + a));
     ['gOwn1','gOwn2','gStf1','gStf2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   }, role === 'owner' ? 'اتغيرت باسورد النظام بتاعتك ✓' : 'اتحفظت باسورد الأدمنز ✓ ابعتها للأدمنز بنفسك');
 }
@@ -824,7 +825,7 @@ function viewSettings(){
     <div class="f"><label>أقصى عدد لجروب السيمي برايفت</label><input id="sSemi" type="number" class="inp" value="${esc(s.semiMax)}"></div>
   </div><div class="mact"><button class="btn p" data-act="saveSettings">💾 حفظ</button></div></div>
   ${DB.mode === 'firebase' ? `<div class="card" style="max-width:640px;margin-top:14px"><h3>🔒 باسورد النظام</h3>
-    <p style="color:var(--mut);margin-top:0">باسورد تانية غير الـ Gmail، والتحقق منها بيتم على سيرفر Google. أي حد هيدخل لازم يكتبها كل 12 ساعة.</p>
+    <p style="color:var(--mut);margin-top:0">باسورد تانية غير الـ Gmail، والتحقق منها بيتم على سيرفر Google. أي دخول جديد بالـ Gmail (من أي جهاز) لازم يكتبها، وبعدها النظام يفضل مفتوح على الجهاز ده لحد تسجيل الخروج.</p>
     <div class="fg">
       <div class="f"><label>باسورد جديدة ليك (المالك)</label><input id="gOwn1" type="password" class="inp" autocomplete="new-password"></div>
       <div class="f"><label>تأكيدها</label><input id="gOwn2" type="password" class="inp" autocomplete="new-password"></div>
@@ -1109,7 +1110,7 @@ document.addEventListener('click', async e => {
     case 'go': go(el.dataset.h); break;
     case 'home': go('#/'); break;
     case 'login': { const pr = new DB.au.GoogleAuthProvider(); pr.setCustomParameters({prompt:'select_account'}); safe(() => DB.au.signInWithPopup(DB.auth, pr)); break; }
-    case 'logout': if (DB.mode === 'firebase') { stopAll(); if (S.user && S.user.uid) await DB.closeSession(S.user.uid); S.user = null; await DB.au.signOut(DB.auth); } break;
+    case 'logout': if (DB.mode === 'firebase') { stopAll(); if (S.user && S.user.uid) await DB.closeSession(); S.user = null; await DB.au.signOut(DB.auth); } break;
     case 'gate': submitGate(el.dataset.mode); break;
     case 'changeGate': changeGate(el.dataset.role); break;
     case 'newRound': roundModal(); break;
