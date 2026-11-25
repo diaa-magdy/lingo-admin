@@ -1,0 +1,84 @@
+rules_version = '2';
+// Lingo Planet academy admin system - security rules
+// Access needs ALL of: Google sign-in (verified) + owner email or listed admin + system password session (12h)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    function myEmail() { return request.auth.token.email.lower(); }
+    function isOwnerId() { return signedIn() && myEmail() == 'diaamagdy4112000@gmail.com'; }
+    function isAdminId() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(myEmail()));
+    }
+    function unlocked() {
+      let s = /databases/$(database)/documents/sessions/$(request.auth.uid);
+      return exists(s) && get(s).data.at > request.time - duration.value(12, 'h');
+    }
+    function isOwner() { return isOwnerId() && unlocked(); }
+    function isStaff() { return (isOwnerId() || isAdminId()) && unlocked(); }
+    function keyOk(role, key) {
+      return hashing.sha256(key).toHexString().lower()
+        == get(/databases/$(database)/documents/gate/$(role)).data.hash;
+    }
+
+    // System-password sessions: created only with the correct password, never readable
+    match /sessions/{uid} {
+      allow read: if false;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['key', 'at'])
+        && request.resource.data.at == request.time
+        && request.resource.data.key is string
+        && request.resource.data.key.size() == 64
+        && ((isOwnerId() && keyOk('owner', request.resource.data.key))
+            || (isAdminId() && keyOk('staff', request.resource.data.key)));
+      allow delete: if signedIn() && request.auth.uid == uid;
+    }
+
+    // Password hashes: nobody can read them; owner sets them (first owner one once, changes need an unlocked session)
+    match /gate/{role} {
+      allow read: if false;
+      allow create: if isOwnerId() && role in ['owner', 'staff']
+        && (role == 'owner' || unlocked())
+        && request.resource.data.keys().hasOnly(['hash'])
+        && request.resource.data.hash is string && request.resource.data.hash.size() == 64;
+      allow update: if isOwner()
+        && request.resource.data.keys().hasOnly(['hash'])
+        && request.resource.data.hash is string && request.resource.data.hash.size() == 64;
+    }
+    match /gatestatus/{role} {
+      allow read: if isOwnerId() || isAdminId();
+      allow create: if isOwnerId() && role in ['owner', 'staff'] && (role == 'owner' || unlocked());
+      allow update: if isOwner();
+    }
+
+    // Admins list: only the (unlocked) owner manages it; an admin can only check himself
+    match /admins/{email} {
+      allow read: if isOwner() || (signedIn() && myEmail() == email);
+      allow write: if isOwner();
+    }
+
+    // Settings: staff read, owner writes
+    match /meta/{doc} {
+      allow read: if isStaff();
+      allow write: if isOwner();
+    }
+
+    // Rounds: staff create/update, only owner deletes a round
+    match /rounds/{roundId} {
+      allow read, create, update: if isStaff();
+      allow delete: if isOwner();
+      match /{sub}/{docId} {
+        allow read, write: if isStaff() && sub in ['students', 'groups', 'teachers', 'expenses'];
+      }
+    }
+
+    // Everything else: denied
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

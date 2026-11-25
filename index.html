@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#15803d">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>نظام إدارة الأكاديمية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#15803d; --g2:#16a34a; --gl:#dcfce7; --gxl:#f0fdf4;
+  --ink:#0f172a; --mut:#64748b; --line:#e2e8f0; --bg:#f6f8f7; --card:#fff;
+  --warn:#b45309; --warnbg:#fef3c7; --red:#b91c1c; --redbg:#fee2e2; --blue:#1d4ed8; --bluebg:#dbeafe;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Cairo',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+a{color:var(--g)}
+.hidden{display:none!important}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--g);color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.top .in{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+.brand{font-weight:800;font-size:18px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.brand .logo{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--g);display:grid;place-items:center;font-weight:800}
+.top nav{display:flex;gap:6px;margin-inline-start:auto;align-items:center;flex-wrap:wrap}
+.top nav button{background:rgba(255,255,255,.14);border:0;color:#fff;padding:6px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+.top nav button:hover{background:rgba(255,255,255,.25)}
+.who{font-size:13px;opacity:.9}
+.demo{background:var(--warnbg);color:var(--warn);text-align:center;padding:6px 12px;font-size:13px;font-weight:600}
+.demo button{margin-inline-start:8px}
+
+main{max-width:1300px;margin:0 auto;padding:18px 16px 60px}
+h1.page{font-size:24px;margin:4px 0 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h3{margin:0 0 10px}
+
+/* buttons */
+.btn{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--g2)}
+.btn.p{background:var(--g);border-color:var(--g);color:#fff}
+.btn.p:hover{background:var(--g2)}
+.btn.d{color:var(--red);border-color:#fecaca}
+.btn.s{padding:4px 10px;font-size:13px;border-radius:8px}
+.btn.pdf{background:#fff;color:#b91c1c;border-color:#fecaca}
+.ibtn{border:0;background:transparent;cursor:pointer;padding:4px 6px;border-radius:8px;font-size:15px}
+.ibtn:hover{background:var(--gxl)}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.bar .sp{flex:1}
+.inp,select.inp{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;min-width:0}
+.inp:focus{outline:2px solid var(--gl);border-color:var(--g2)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.rcard{cursor:pointer;transition:.15s;position:relative}
+.rcard:hover{border-color:var(--g2);box-shadow:0 6px 20px rgba(21,128,61,.10);transform:translateY(-2px)}
+.rcard .num{font-size:28px;font-weight:800;color:var(--g)}
+.rcard .meta{color:var(--mut);font-size:13px}
+.rcard .acts{position:absolute;top:10px;left:10px;display:flex;gap:2px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:110px}
+.stat b{display:block;font-size:20px;color:var(--g)}
+.stat span{font-size:12px;color:var(--mut)}
+.stat.w b{color:var(--warn)} .stat.r b{color:var(--red)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;border-bottom:2px solid var(--line)}
+.tab{border:0;background:transparent;padding:10px 14px;font-weight:700;color:var(--mut);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tab.on{color:var(--g);border-bottom-color:var(--g)}
+.tab .c{background:var(--gl);color:var(--g);border-radius:20px;padding:0 8px;font-size:12px;margin-inline-start:4px}
+
+/* tables */
+.tw{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px 10px;text-align:start;border-bottom:1px solid var(--line);vertical-align:middle}
+th{background:var(--gxl);font-size:13px;color:#166534;white-space:nowrap;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fafdfb}
+tfoot td{font-weight:800;background:var(--gxl)}
+td.n{color:var(--mut);width:36px}
+.phone{direction:ltr;unicode-bidi:embed;white-space:nowrap}
+.empty{padding:30px;text-align:center;color:var(--mut)}
+.tag{display:inline-block;padding:1px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.t-private{background:#ede9fe;color:#6d28d9}.t-semi{background:var(--bluebg);color:var(--blue)}.t-group{background:var(--gl);color:var(--g)}
+.lv{display:inline-block;padding:1px 10px;border-radius:8px;background:#f1f5f9;font-weight:800;direction:ltr;font-size:13px}
+.lv.none{background:var(--warnbg);color:var(--warn)}
+
+/* groups */
+.lvsec{margin-bottom:22px}
+.lvsec>h2{font-size:20px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.tysec{margin:0 0 14px}
+.tysec h4{margin:0 0 8px;color:var(--mut);font-size:14px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.gcard.inc{border-color:#fcd34d}
+.gcard.wa{border-color:#86efac}
+.ghead{padding:10px 12px;background:var(--gxl);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.gcard.inc .ghead{background:#fffbeb}
+.gname{font-weight:800;font-size:16px;margin-inline-end:auto}
+.cnt{font-weight:800;padding:1px 10px;border-radius:20px;background:#fff;border:1px solid var(--line);font-size:13px}
+.st-ok{color:var(--g)} .st-inc{color:var(--warn)} .st-over{color:var(--red)}
+.watg{border:1px dashed #94a3b8;background:#fff;border-radius:10px;padding:4px 10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--mut)}
+.watg.on{border:1px solid #22c55e;background:#22c55e;color:#fff}
+.gbody{padding:6px 12px 10px}
+.gst{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.gst:last-child{border-bottom:0}
+.gst .nm{flex:1;font-weight:600}
+.gst .nm small{display:block;color:var(--mut);font-weight:400}
+.wck{border:1px solid var(--line);background:#fff;border-radius:8px;padding:2px 8px;font-size:12px;cursor:pointer;white-space:nowrap}
+.wck.on{background:#dcfce7;border-color:#22c55e;color:#166534;font-weight:700}
+.mini{font-size:12px;padding:3px 6px;border-radius:8px;border:1px solid var(--line);background:#fff;max-width:120px}
+.gfoot{padding:8px 12px;border-top:1px solid var(--line);display:flex;gap:6px;align-items:center;font-size:13px}
+.alert{border-radius:12px;padding:10px 14px;margin-bottom:12px;font-weight:600}
+.alert.w{background:var(--warnbg);color:var(--warn)}
+.alert.i{background:var(--bluebg);color:var(--blue)}
+.alert.ok{background:var(--gl);color:var(--g)}
+
+/* finance */
+.fin{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.fin .card b{display:block;font-size:26px;font-weight:800}
+.fin .card span{color:var(--mut);font-size:13px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+
+/* progress */
+.prog{display:flex;gap:6px;flex-wrap:wrap}
+.pchk{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:10px;padding:3px 8px;cursor:pointer;font-size:13px;background:#fff;user-select:none}
+.pchk.on{background:var(--gl);border-color:#22c55e;color:#166534;font-weight:700}
+.pchk input{display:none}
+.bar-p{height:8px;background:#f1f5f9;border-radius:8px;overflow:hidden;min-width:80px}
+.bar-p i{display:block;height:100%;background:var(--g2)}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:40px 12px;overflow-y:auto}
+.mbox{background:#fff;border-radius:18px;width:100%;max-width:560px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.mbox h3{font-size:20px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg .full{grid-column:1/-1}
+.f label{display:block;font-size:13px;font-weight:700;margin-bottom:4px;color:#334155}
+.f .inp{width:100%}
+.radios{display:flex;gap:6px;flex-wrap:wrap}
+.radios label{border:1px solid var(--line);border-radius:10px;padding:6px 12px;cursor:pointer;font-weight:600;font-size:14px;margin:0}
+.radios input{display:none}
+.radios input:checked+span{color:var(--g)}
+.radios label:has(input:checked){border-color:var(--g);background:var(--gxl)}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.chklist{max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.chklist label{display:flex;gap:8px;align-items:center;padding:3px 0;font-weight:600;cursor:pointer}
+@media(max-width:560px){.fg{grid-template-columns:1fr}}
+
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:6px;align-items:center}
+.tst{background:#0f172a;color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.tst.err{background:var(--red)}
+
+/* login */
+.center{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lbox{background:#fff;border-radius:22px;padding:34px 28px;max-width:420px;width:100%;text-align:center;border:1px solid var(--line);box-shadow:0 20px 50px rgba(21,128,61,.10)}
+.lbox .logo{width:70px;height:70px;border-radius:20px;background:var(--g);color:#fff;display:grid;place-items:center;font-size:30px;font-weight:800;margin:0 auto 12px}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer;margin-top:18px;font-size:16px}
+.gbtn:hover{border-color:var(--g2)}
+
+/* print */
+#printArea{display:none}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;font-size:12px}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block!important}
+  .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #15803d;padding-bottom:8px;margin-bottom:12px}
+  .ph h1{margin:0;font-size:20px;color:#15803d}
+  .ph h2{margin:0;font-size:16px}
+  .pdate{font-size:11px;color:#475569;text-align:left}
+  #printArea table{border:1px solid #cbd5e1;margin-bottom:12px;page-break-inside:auto}
+  #printArea th,#printArea td{border:1px solid #cbd5e1;padding:5px 7px;font-size:11.5px}
+  #printArea th{background:#dcfce7!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;position:static}
+  #printArea tr{page-break-inside:avoid}
+  .pg{page-break-inside:avoid;margin-bottom:12px}
+  .pg h4{margin:0 0 4px;font-size:13px;background:#f0fdf4;padding:4px 8px;border-right:4px solid #15803d;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .psec{font-size:15px;margin:14px 0 6px;color:#15803d}
+  .pbreak{page-break-before:always}
+  .psum{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 10px;font-size:12px}
+  .psum div{border:1px solid #cbd5e1;border-radius:6px;padding:4px 10px}
+  .pfoot{margin-top:14px;font-size:10px;color:#64748b;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="center"><div class="lbox"><div class="logo">LP</div>جاري التحميل…</div></div></div>
+<div id="modal" class="modal hidden"></div>
+<div id="toast"></div>
+<div id="printArea"></div>
+
+<script type="module">
+/* =====================================================================
+   الإعدادات — الصق هنا بيانات مشروع Firebase بتاعك (من Project settings)
+   لو سبتها null النظام هيشتغل "وضع تجربة" والبيانات بتتحفظ على الجهاز بس
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBfPJjK7eYhtpGbH1J7JU-ZK_SxEDYwSAs",
+  authDomain: "lingo-planet-admin.firebaseapp.com",
+  projectId: "lingo-planet-admin",
+  storageBucket: "lingo-planet-admin.firebasestorage.app",
+  messagingSenderId: "301721532109",
+  appId: "1:301721532109:web:8403919409069a9f2fdb84"
+};
+/* مثال:
+const FIREBASE_CONFIG = {
+  apiKey: "AIza....",
+  authDomain: "lingo-planet-admin.firebaseapp.com",
+  projectId: "lingo-planet-admin",
+  storageBucket: "lingo-planet-admin.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};
+*/
+const OWNER_EMAIL = "diaamagdy4112000@gmail.com"; // ← إيميل الـ Gmail بتاعك (المالك)
+
+/* ===================================================================== */
+const LEVELS = ['Pre A1','A1','A1+','A2','A2+','B1','B1+','B2','B2+','C1'];
+const TYPES = {private:'برايفت', semi:'سيمي برايفت', group:'جروب'};
+const TYPE_ORDER = ['private','semi','group'];
+const DEFAULT_SETTINGS = {academyName:'Lingo Planet Academy', logoUrl:'logo.png', currency:'ج.م', semiMax:3, groupMin:7, groupMax:8, countryCode:'20'};
+const SAL_MODES = {fixed:'مبلغ أكتبه بنفسي', hourly:'بالساعة (عدد الساعات × سعر الساعة)', perGroup:'بالجروب (عدد الجروبات × سعر الجروب)', perStudent:'بالطالب (عدد الطلاب × سعر الطالب)'};
+const SAL_SHORT = {fixed:'مبلغ ثابت', hourly:'بالساعة', perGroup:'بالجروب', perStudent:'بالطالب'};
+
+const S = {
+  user:null, role:null, settings:{...DEFAULT_SETTINGS},
+  rounds:{}, admins:{}, view:'home', rid:null, tab:'students',
+  rd:{students:{},groups:{},teachers:{},expenses:{}}, loaded:0,
+  q:'', fType:'', noLevel:false, unsubs:[], roundUnsubs:[]
+};
+let DB;
+let relockTimer = null;
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toEn = s => String(s ?? '').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+const num = v => { const n = parseFloat(toEn(v).replace(/,/g,'')); return isNaN(n) ? 0 : n; };
+const fmt = v => num(v).toLocaleString('en-US', {maximumFractionDigits:2});
+const money = v => fmt(v) + ' ' + (S.settings.currency || '');
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+const clone = o => JSON.parse(JSON.stringify(o ?? {}));
+const P = c => `rounds/${S.rid}/${c}`;
+const isOwner = () => S.role === 'owner';
+const typeOf = s => s.type || 'group';
+const capOf = t => t === 'private' ? 1 : t === 'semi' ? Math.max(1, num(S.settings.semiMax) || 3) : Math.max(1, num(S.settings.groupMax) || 8);
+const minOf = t => t === 'private' ? 1 : t === 'semi' ? Math.max(1, num(S.settings.semiMax) || 3) : Math.max(1, num(S.settings.groupMin) || 7);
+const typeLabel = t => t === 'group' ? `جروب (${S.settings.groupMin}-${S.settings.groupMax})` : TYPES[t];
+const lvlIdx = l => { const i = LEVELS.indexOf(l); return i < 0 ? 99 : i; };
+function waLink(phone){
+  let d = toEn(phone).replace(/[^\d+]/g,'');
+  if (!d) return '';
+  if (d.startsWith('+')) d = d.slice(1);
+  else if (d.startsWith('00')) d = d.slice(2);
+  else if (d.startsWith('0')) d = (S.settings.countryCode || '20') + d.slice(1);
+  return 'https://wa.me/' + d;
+}
+const phoneHtml = p => p ? `<a class="phone" href="${waLink(p)}" target="_blank" rel="noopener" title="فتح واتساب">${esc(p)}</a>` : '<span style="color:#94a3b8">—</span>';
+const typeTag = t => `<span class="tag t-${t}">${esc(TYPES[t] || t)}</span>`;
+const lvTag = l => l ? `<span class="lv">${esc(l)}</span>` : `<span class="lv none">لم يحدد</span>`;
+function toast(msg, kind=''){
+  const el = document.createElement('div'); el.className = 'tst ' + kind; el.textContent = msg;
+  $('#toast').appendChild(el); setTimeout(() => el.remove(), 2600);
+}
+async function safe(fn, okMsg){
+  try { const r = await fn(); if (okMsg) toast(okMsg); return r; }
+  catch(e){ console.error(e); toast('حصل خطأ: ' + (e.code || e.message || e), 'err'); }
+}
+
+function logoHtml(size){
+  const u = S.settings.logoUrl;
+  const fb = `<div class="logo" style="width:${size}px;height:${size}px;${u ? 'display:none' : ''}">LP</div>`;
+  return (u ? `<img src="${esc(u)}" alt="Lingo Planet" style="width:${size}px;height:${size}px;object-fit:contain;border-radius:10px;background:#fff" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">` : '') + fb;
+}
+/* ---------- data layer: demo (localStorage) ---------- */
+function makeDemoDB(){
+  const KEY = 'lp_academy_admin_demo_v1';
+  let store; try { store = JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ store = {}; }
+  const subs = {};
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} };
+  const emit = path => (subs[path] || []).forEach(cb => cb(clone(store[path] || {})));
+  return {
+    mode:'demo',
+    watch(path, cb){ (subs[path] = subs[path] || []).push(cb); setTimeout(() => cb(clone(store[path] || {}))); return () => { subs[path] = (subs[path]||[]).filter(x => x !== cb); }; },
+    async get(path, id){ return store[path]?.[id] ? clone(store[path][id]) : null; },
+    async getAll(path){ return clone(store[path] || {}); },
+    async add(path, data){ const id = uid(); (store[path] = store[path] || {})[id] = clone(data); save(); emit(path); return id; },
+    async set(path, id, data){ store[path] = store[path] || {}; store[path][id] = {...(store[path][id] || {}), ...clone(data)}; save(); emit(path); },
+    async del(path, id){ if (store[path]) delete store[path][id]; save(); emit(path); },
+    async batch(ops){
+      const touched = new Set();
+      for (const o of ops){
+        store[o.path] = store[o.path] || {}; const id = o.id || uid();
+        if (o.op === 'del') delete store[o.path][id];
+        else if (o.op === 'replace') store[o.path][id] = clone(o.data);
+        else store[o.path][id] = {...(store[o.path][id] || {}), ...clone(o.data)};
+        touched.add(o.path);
+      }
+      save(); touched.forEach(emit);
+    },
+    reset(){ store = {}; save(); Object.keys(subs).forEach(emit); }
+  };
+}
+
+/* ---------- data layer: Firebase ---------- */
+async function makeFirebaseDB(){
+  const B = 'https://www.gstatic.com/firebasejs/10.12.2/';
+  const [appM, fs, au] = await Promise.all([import(B+'firebase-app.js'), import(B+'firebase-firestore.js'), import(B+'firebase-auth.js')]);
+  const app = appM.initializeApp(FIREBASE_CONFIG);
+  const db = fs.getFirestore(app);
+  const auth = au.getAuth(app);
+  const C = p => fs.collection(db, ...p.split('/'));
+  const D = (p, id) => fs.doc(db, ...p.split('/'), id);
+  return {
+    mode:'firebase', auth, au,
+    async openSession(uid, key){ await fs.setDoc(D('sessions', uid), {key, at: fs.serverTimestamp()}); },
+    async closeSession(uid){ try { await fs.deleteDoc(D('sessions', uid)); } catch(e){} },
+    watch(path, cb){
+      return fs.onSnapshot(C(path), snap => { const o = {}; snap.forEach(d => o[d.id] = d.data()); cb(o); },
+        err => { console.error(err); if (err.code === 'permission-denied' && S.user && S.user.uid){ if (!relockTimer) relockTimer = setTimeout(() => { relockTimer = null; stopAll(); gateFlow(); }, 300); } else toast('مشكلة في الاتصال بقاعدة البيانات (' + err.code + ')', 'err'); });
+    },
+    async get(path, id){ const s = await fs.getDoc(D(path, id)); return s.exists() ? s.data() : null; },
+    async getAll(path){ const s = await fs.getDocs(C(path)); const o = {}; s.forEach(d => o[d.id] = d.data()); return o; },
+    async add(path, data){ const r = await fs.addDoc(C(path), data); return r.id; },
+    async set(path, id, data){ await fs.setDoc(D(path, id), data, {merge:true}); },
+    async del(path, id){ await fs.deleteDoc(D(path, id)); },
+    async batch(ops){
+      for (let i = 0; i < ops.length; i += 200){
+        const b = fs.writeBatch(db);
+        for (const o of ops.slice(i, i + 200)){
+          const ref = o.id ? D(o.path, o.id) : fs.doc(C(o.path));
+          if (o.op === 'del') b.delete(ref);
+          else if (o.op === 'replace') b.set(ref, o.data);
+          else b.set(ref, o.data, {merge:true});
+        }
+        await b.commit();
+      }
+    }
+  };
+}
+
+/* ---------- boot & auth ---------- */
+async function boot(){
+  if (!FIREBASE_CONFIG){
+    DB = makeDemoDB();
+    S.user = {email:'demo', name:'وضع التجربة'}; S.role = 'owner';
+    startApp(); return;
+  }
+  try { DB = await makeFirebaseDB(); }
+  catch(e){ console.error(e); $('#app').innerHTML = `<div class="center"><div class="lbox"><div class="logo">!</div><h3>مش قادر أوصل لـ Firebase</h3><p>اتأكد من النت ومن بيانات FIREBASE_CONFIG.</p></div></div>`; return; }
+  DB.au.onAuthStateChanged(DB.auth, async u => {
+    stopAll();
+    if (!u){ renderLogin(); return; }
+    const email = (u.email || '').toLowerCase();
+    let role = null;
+    if (email && email === OWNER_EMAIL.trim().toLowerCase()) role = 'owner';
+    else { try { if (await DB.get('admins', email)) role = 'admin'; } catch(e){ console.warn(e); } }
+    if (!role){ renderDenied(email); return; }
+    S.user = {email, name:u.displayName || email, uid:u.uid}; S.role = role;
+    gateFlow();
+  });
+}
+function renderLogin(){
+  $('#app').innerHTML = `<div class="center"><div class="lbox">
+    <div style="display:flex;justify-content:center;margin-bottom:10px">${logoHtml(80)}</div>
+    <h2 style="margin:0">Lingo Planet · نظام إدارة الأكاديمية</h2>
+    <p style="color:var(--mut);margin:6px 0 0">الدخول للمالك والأدمنز المضافين بس</p>
+    <button class="gbtn" data-act="login"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> الدخول بحساب Google</button>
+  </div></div>`;
+}
+function renderDenied(email){
+  $('#app').innerHTML = `<div class="center"><div class="lbox">
+    <div class="logo" style="background:var(--red)">✕</div>
+    <h3>الحساب ده مالوش صلاحية</h3>
+    <p class="phone" style="color:var(--mut)">${esc(email)}</p>
+    <p>اطلب من مالك الأكاديمية يضيف الإيميل ده في قائمة الأدمنز، وبعدين ادخل تاني.</p>
+    <button class="btn" data-act="logout">تسجيل خروج</button>
+  </div></div>`;
+}
+/* ---------- system password (second password, checked on Google's server) ---------- */
+const GATE_SALT = 'lingo-planet-admin|v1|';
+async function sha256hex(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+const gateRole = () => S.role === 'owner' ? 'owner' : 'staff';
+async function isUnlocked(){
+  try { await DB.get('meta', 'settings'); return true; }
+  catch(e){ if (e.code === 'permission-denied') return false; throw e; }
+}
+async function gateFlow(){
+  $('#app').innerHTML = `<div class="center"><div class="lbox">${logoHtml(70)}<p>جاري التحقق…</p></div></div>`;
+  try {
+    if (await isUnlocked()) { startApp(); return; }
+    const st = await DB.get('gatestatus', gateRole());
+    renderGate(st ? 'enter' : (S.role === 'owner' ? 'create' : 'wait'));
+  } catch(e){ console.error(e); renderGate('enter'); }
+}
+function renderGate(mode, err=''){
+  const t = {
+    create: ['اعمل باسورد النظام', 'دي باسورد تانية غير الـ Gmail. حتى لو حد دخل بحسابك، مش هيقدر يفتح النظام من غيرها. خليها 12 حرف على الأقل، واكتبها على ورقة في مكان آمن.'],
+    enter: ['باسورد النظام', S.role === 'owner' ? 'اكتب باسورد النظام بتاعتك.' : 'اكتب باسورد الأدمنز اللي المالك إداهالك.'],
+    wait: ['لسه مفيش باسورد للأدمنز', 'المالك لازم يعمل باسورد الأدمنز من الإعدادات الأول، وبعدين يديهالك.']
+  }[mode];
+  $('#app').innerHTML = `<div class="center"><div class="lbox">
+    <div style="display:flex;justify-content:center;margin-bottom:10px">${logoHtml(70)}</div>
+    <h2 style="margin:0">🔒 ${t[0]}</h2>
+    <p style="color:var(--mut)">${t[1]}</p>
+    <p class="phone" style="font-size:13px;color:var(--mut)">${esc(S.user.email)}</p>
+    ${mode === 'wait' ? '' : `
+      <input id="gp1" type="password" class="inp" style="width:100%;margin-top:6px" placeholder="الباسورد" autocomplete="${mode === 'create' ? 'new-password' : 'current-password'}">
+      ${mode === 'create' ? `<input id="gp2" type="password" class="inp" style="width:100%;margin-top:8px" placeholder="اكتبها تاني للتأكيد" autocomplete="new-password">` : ''}
+      ${err ? `<div class="alert w" style="margin:10px 0 0">${esc(err)}</div>` : ''}
+      <button class="gbtn" style="background:var(--g);color:#fff;border-color:var(--g)" data-act="gate" data-mode="${mode}">${mode === 'create' ? 'حفظ والدخول' : 'دخول'}</button>`}
+    <button class="btn s" style="margin-top:12px" data-act="logout">تسجيل خروج</button>
+  </div></div>`;
+  setTimeout(() => { const i = document.getElementById('gp1'); i && i.focus(); }, 30);
+}
+async function setGate(role, pw){
+  const hash = await sha256hex(await sha256hex(GATE_SALT + pw));
+  await DB.batch([
+    {op:'replace', path:'gate', id:role, data:{hash}},
+    {op:'replace', path:'gatestatus', id:role, data:{set:true, at:Date.now()}}
+  ]);
+}
+let gateBusy = false;
+async function submitGate(mode){
+  if (gateBusy) return;
+  const pw = (document.getElementById('gp1') || {}).value || '';
+  if (mode === 'create'){
+    const pw2 = (document.getElementById('gp2') || {}).value || '';
+    if (pw.length < 12) return renderGate(mode, 'الباسورد لازم تكون 12 حرف على الأقل.');
+    if (pw !== pw2) return renderGate(mode, 'الباسوردين مش زي بعض.');
+  } else if (!pw) return;
+  gateBusy = true;
+  try {
+    if (mode === 'create') await setGate('owner', pw);
+    await DB.openSession(S.user.uid, await sha256hex(GATE_SALT + pw));
+    gateBusy = false; startApp();
+  } catch(e){
+    gateBusy = false; console.error(e);
+    renderGate(mode === 'create' ? 'enter' : mode, e.code === 'permission-denied' ? 'الباسورد غلط.' : 'حصل خطأ في الاتصال، جرّب تاني.');
+  }
+}
+async function changeGate(role){
+  const a = mv(role === 'owner' ? 'gOwn1' : 'gStf1'), b = mv(role === 'owner' ? 'gOwn2' : 'gStf2');
+  if (a.length < 12){ toast('الباسورد لازم تكون 12 حرف على الأقل', 'err'); return; }
+  if (a !== b){ toast('الباسوردين مش زي بعض', 'err'); return; }
+  await safe(async () => {
+    await setGate(role, a);
+    if (role === 'owner') await DB.openSession(S.user.uid, await sha256hex(GATE_SALT + a));
+    ['gOwn1','gOwn2','gStf1','gStf2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  }, role === 'owner' ? 'اتغيرت باسورد النظام بتاعتك ✓' : 'اتحفظت باسورد الأدمنز ✓ ابعتها للأدمنز بنفسك');
+}
+function stopAll(){ [...S.unsubs, ...S.roundUnsubs].forEach(f => { try{ f(); }catch(e){} }); S.unsubs = []; S.roundUnsubs = []; }
+
+function startApp(){
+  S.unsubs.push(DB.watch('meta', o => { S.settings = {...DEFAULT_SETTINGS, ...(o.settings || {})}; render(); }));
+  S.unsubs.push(DB.watch('rounds', o => { S.rounds = o; if (S.view === 'round' && S.rid && !o[S.rid]) go('#/'); else render(); }));
+  if (isOwner()) S.unsubs.push(DB.watch('admins', o => { S.admins = o; if (S.view === 'admins') render(); }));
+  window.onhashchange = route; route();
+}
+
+/* ---------- routing ---------- */
+function go(h){ if (location.hash === h) route(); else location.hash = h; }
+function route(){
+  const parts = location.hash.replace(/^#\/?/, '').split('/');
+  if (parts[0] === 'round' && parts[1]){
+    if (S.rid !== parts[1]) openRound(parts[1]);
+    S.view = 'round'; S.tab = parts[2] || 'students';
+  } else if (parts[0] === 'admins' && isOwner()) S.view = 'admins';
+  else if (parts[0] === 'settings' && isOwner()) S.view = 'settings';
+  else { S.view = 'home'; closeRound(); }
+  render();
+}
+function closeRound(){ S.roundUnsubs.forEach(f => f()); S.roundUnsubs = []; S.rid = null; S.rd = {students:{},groups:{},teachers:{},expenses:{}}; }
+function openRound(rid){
+  closeRound(); S.rid = rid; S.loaded = 0; S.q = ''; S.fType = ''; S.noLevel = false;
+  const seen = new Set();
+  ['students','groups','teachers','expenses'].forEach(c => {
+    S.roundUnsubs.push(DB.watch(`rounds/${rid}/${c}`, o => {
+      if (S.rid !== rid) return;
+      S.rd[c] = o; seen.add(c); S.loaded = seen.size;
+      render(); syncRoundStats();
+    }));
+  });
+}
+let statsTimer;
+function syncRoundStats(){
+  if (S.loaded < 4 || !S.rid) return;
+  clearTimeout(statsTimer);
+  statsTimer = setTimeout(() => {
+    const r = S.rounds[S.rid]; if (!r) return;
+    const st = Object.values(S.rd.students);
+    const stats = {students: st.length, income: st.reduce((a, s) => a + num(s.paid), 0), groups: Object.keys(S.rd.groups).length};
+    const o = r.stats || {};
+    if (o.students !== stats.students || o.income !== stats.income || o.groups !== stats.groups) DB.set('rounds', S.rid, {stats}).catch(()=>{});
+  }, 800);
+}
+
+/* ---------- derived data ---------- */
+const students = () => Object.entries(S.rd.students).sort((a, b) => (a[1].createdAt || 0) - (b[1].createdAt || 0));
+function groupsList(){
+  return Object.entries(S.rd.groups).sort((a, b) => lvlIdx(a[1].level) - lvlIdx(b[1].level) || TYPE_ORDER.indexOf(a[1].type) - TYPE_ORDER.indexOf(b[1].type) || (a[1].num || 0) - (b[1].num || 0));
+}
+const groupName = g => `${g.level} · ${g.type === 'group' ? 'جروب' : TYPES[g.type]} ${g.num || ''}`.trim();
+const validIds = g => (g.studentIds || []).filter(id => S.rd.students[id]);
+function studentGroupMap(){
+  const m = {};
+  for (const [gid, g] of Object.entries(S.rd.groups)) for (const sid of validIds(g)) m[sid] = gid;
+  return m;
+}
+function groupStatus(g){
+  const n = validIds(g).length, min = minOf(g.type), max = capOf(g.type);
+  if (n > max) return {cls:'st-over', txt:`زيادة ${n - max}`, inc:false, over:true};
+  if (n < min) return {cls:'st-inc', txt:`ناقص ${min - n}`, inc:true};
+  return {cls:'st-ok', txt:'مكتمل ✓', inc:false};
+}
+function teacherCalc(tid){
+  const t = S.rd.teachers[tid] || {};
+  const gs = groupsList().filter(([, g]) => g.teacherId === tid);
+  const sc = gs.reduce((a, [, g]) => a + validIds(g).length, 0);
+  const amt = num(t.amount);
+  const hours = num(t.hours);
+  const salary = t.mode === 'perGroup' ? amt * gs.length : t.mode === 'perStudent' ? amt * sc : t.mode === 'hourly' ? amt * hours : amt;
+  return {groups: gs, groupsCount: gs.length, studentsCount: sc, salary, hours};
+}
+function finance(){
+  const st = Object.values(S.rd.students);
+  const income = st.reduce((a, s) => a + num(s.paid), 0);
+  const salaries = Object.keys(S.rd.teachers).reduce((a, id) => a + teacherCalc(id).salary, 0);
+  const paidSal = Object.keys(S.rd.teachers).filter(id => S.rd.teachers[id].paid).reduce((a, id) => a + teacherCalc(id).salary, 0);
+  const expenses = Object.values(S.rd.expenses).reduce((a, e) => a + num(e.amount), 0);
+  return {income, salaries, paidSal, expenses, net: income - salaries - expenses};
+}
+const roundTitle = r => r ? (`راوند ${r.number ?? ''}` + (r.name ? ` — ${r.name}` : '')) : '';
+
+/* ---------- render ---------- */
+function render(){
+  if (!DB || !S.user) return;
+  const ae = document.activeElement, aid = ae && ae.id, sel = ae && ae.selectionStart;
+  const main = S.view === 'round' ? viewRound() : S.view === 'admins' ? viewAdmins() : S.view === 'settings' ? viewSettings() : viewHome();
+  $('#app').innerHTML = `
+    <div class="top"><div class="in">
+      <div class="brand" data-act="home">${logoHtml(34)}<span>${esc(S.settings.academyName)}</span></div>
+      <nav>
+        <button data-act="home">🏠 الراوندات</button>
+        ${isOwner() && DB.mode === 'firebase' ? `<button data-act="go" data-h="#/admins">👥 الأدمنز</button>` : ''}
+        ${isOwner() ? `<button data-act="go" data-h="#/settings">⚙️ الإعدادات</button>` : ''}
+        <span class="who">${esc(S.user.name)} ${isOwner() ? '(المالك)' : '(أدمن)'}</span>
+        ${DB.mode === 'firebase' ? `<button data-act="logout">خروج</button>` : ''}
+      </nav>
+    </div></div>
+    ${DB.mode === 'demo' ? `<div class="demo">وضع تجربة: البيانات محفوظة على الجهاز ده بس، ولسه مش متوصلة بـ Firebase.
+      <button class="btn s" data-act="seed">إضافة بيانات تجريبية</button><button class="btn s d" data-act="resetDemo">مسح التجربة</button></div>` : ''}
+    <main>${main}</main>`;
+  if (aid){ const el = document.getElementById(aid); if (el){ el.focus(); try{ if (sel != null) el.setSelectionRange(sel, sel); }catch(e){} } }
+}
+
+function viewHome(){
+  const rs = Object.entries(S.rounds).sort((a, b) => num(b[1].number) - num(a[1].number));
+  return `<h1 class="page">الراوندات <span class="sp" style="flex:1"></span><button class="btn p" data-act="newRound">＋ إضافة راوند</button></h1>
+  ${rs.length ? `<div class="grid">${rs.map(([id, r]) => `
+    <div class="card rcard" data-act="go" data-h="#/round/${id}">
+      <div class="acts">
+        <button class="ibtn" title="تعديل" data-act="editRound" data-id="${id}">✏️</button>
+        ${isOwner() ? `<button class="ibtn" title="حذف" data-act="delRound" data-id="${id}">🗑️</button>` : ''}
+      </div>
+      <div class="meta">راوند</div>
+      <div class="num">${esc(r.number)}</div>
+      ${r.name ? `<div style="font-weight:700">${esc(r.name)}</div>` : ''}
+      <div class="meta">${r.startDate ? 'البداية: ' + esc(r.startDate) : ''}</div>
+      <div class="stats" style="margin:10px 0 0">
+        <div class="stat"><b>${r.stats?.students ?? '—'}</b><span>طالب</span></div>
+        <div class="stat"><b>${r.stats ? fmt(r.stats.income) : '—'}</b><span>الدخل (${esc(S.settings.currency)})</span></div>
+      </div>
+    </div>`).join('')}</div>`
+  : `<div class="card empty"><div style="font-size:40px">📚</div><h3>لسه مفيش راوندات</h3><p>ابدأ بإضافة أول راوند.</p><button class="btn p" data-act="newRound">＋ إضافة راوند</button></div>`}`;
+}
+
+const TABS = [
+  ['students','👨‍🎓 المشتركين'], ['levels','🎯 تحديد المستوى'], ['groups','👥 الجروبات'],
+  ['teachers','👩‍🏫 المدرسين'], ['finance','💰 الحسابات'], ['multi','📈 متعددي المستويات']
+];
+function viewRound(){
+  const r = S.rounds[S.rid];
+  if (!r) return `<div class="card empty">جاري التحميل…</div>`;
+  if (S.loaded < 4) return `<h1 class="page">${esc(roundTitle(r))}</h1><div class="card empty">جاري تحميل بيانات الراوند…</div>`;
+  const st = Object.values(S.rd.students), f = finance();
+  const counts = {
+    students: st.length, levels: st.filter(s => !s.level).length || '', groups: Object.keys(S.rd.groups).length,
+    teachers: Object.keys(S.rd.teachers).length, finance:'', multi: st.filter(s => num(s.levelsCount) > 1).length
+  };
+  const body = {students:tabStudents, levels:tabLevels, groups:tabGroups, teachers:tabTeachers, finance:tabFinance, multi:tabMulti}[S.tab] || tabStudents;
+  return `<h1 class="page"><button class="btn s" data-act="home">→ رجوع</button> ${esc(roundTitle(r))}
+      <span style="flex:1"></span><button class="btn pdf" data-act="pdf" data-k="all">📄 تقرير الراوند كامل PDF</button></h1>
+    <div class="stats">
+      <div class="stat"><b>${st.length}</b><span>مشترك</span></div>
+      <div class="stat ${counts.levels ? 'w' : ''}"><b>${st.filter(s => !s.level).length}</b><span>من غير مستوى</span></div>
+      <div class="stat"><b>${Object.keys(S.rd.groups).length}</b><span>جروب</span></div>
+      <div class="stat"><b>${fmt(f.income)}</b><span>الدخل</span></div>
+      <div class="stat"><b>${fmt(f.salaries)}</b><span>المرتبات</span></div>
+      <div class="stat ${f.net < 0 ? 'r' : ''}"><b>${fmt(f.net)}</b><span>الصافي</span></div>
+    </div>
+    <div class="tabs">${TABS.map(([k, l]) => `<button class="tab ${S.tab === k ? 'on' : ''}" data-act="go" data-h="#/round/${S.rid}/${k}">${l}${counts[k] !== '' && counts[k] !== undefined ? `<span class="c">${counts[k]}</span>` : ''}</button>`).join('')}</div>
+    ${body()}`;
+}
+
+/* --- students tab --- */
+function filteredStudents(){
+  const q = S.q.trim().toLowerCase();
+  return students().filter(([, s]) => (!S.fType || typeOf(s) === S.fType) && (!q || (s.name || '').toLowerCase().includes(q) || toEn(s.phone).includes(toEn(q))));
+}
+function tabStudents(){
+  const list = filteredStudents();
+  const total = list.reduce((a, [, s]) => a + num(s.paid), 0);
+  return `<div class="bar">
+      <button class="btn p" data-act="addStudent">＋ إضافة مشترك</button>
+      <input id="q" class="inp" placeholder="🔎 بحث بالاسم أو التليفون" value="${esc(S.q)}" data-inp="q" style="width:230px">
+      <select id="fType" class="inp" data-chg="fType"><option value="">كل الأنواع</option>${TYPE_ORDER.map(t => `<option value="${t}" ${S.fType === t ? 'selected' : ''}>${TYPES[t]}</option>`).join('')}</select>
+      <span class="sp"></span><button class="btn pdf" data-act="pdf" data-k="students">📄 PDF</button>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>اسم الطالب</th><th>التليفون</th><th>نوع الاشتراك</th><th>المدفوع</th><th>عدد المستويات</th><th>المستوى</th><th>ملاحظات</th><th></th></tr></thead>
+      <tbody>${list.length ? list.map(([id, s], i) => `<tr>
+        <td class="n">${i + 1}</td><td><b>${esc(s.name)}</b>${s.carriedFrom ? `<br><small style="color:var(--mut)">منقول من ${esc(s.carriedFrom)}</small>` : ''}</td>
+        <td>${phoneHtml(s.phone)}</td><td>${typeTag(typeOf(s))}</td><td><b>${money(s.paid)}</b></td>
+        <td>${num(s.levelsCount) || 1}</td><td>${lvTag(s.level)}</td><td style="max-width:200px;color:var(--mut);font-size:13px">${esc(s.notes)}</td>
+        <td style="white-space:nowrap"><button class="ibtn" data-act="editStudent" data-id="${id}" title="تعديل">✏️</button><button class="ibtn" data-act="delStudent" data-id="${id}" title="حذف">🗑️</button></td>
+      </tr>`).join('') : `<tr><td colspan="9" class="empty">${S.q || S.fType ? 'مفيش نتايج' : 'لسه مفيش مشتركين. دوس "إضافة مشترك".'}</td></tr>`}</tbody>
+      ${list.length ? `<tfoot><tr><td></td><td>الإجمالي: ${list.length} طالب</td><td></td><td></td><td>${money(total)}</td><td colspan="4"></td></tr></tfoot>` : ''}
+    </table></div>`;
+}
+
+/* --- levels tab --- */
+function tabLevels(){
+  const all = students();
+  const list = all.filter(([, s]) => !S.noLevel || !s.level);
+  const per = {}; all.forEach(([, s]) => { if (s.level) per[s.level] = (per[s.level] || 0) + 1; });
+  const none = all.filter(([, s]) => !s.level).length;
+  return `<div class="alert i">أي طالب بيتضاف في المشتركين بينزل هنا تلقائي. اختار مستواه وهيتحفظ لوحده.</div>
+    <div class="bar">
+      <label class="btn s" style="cursor:pointer"><input type="checkbox" id="noLevel" data-chg="noLevel" ${S.noLevel ? 'checked' : ''}> اللي لسه من غير مستوى بس (${none})</label>
+      <span class="sp"></span><button class="btn pdf" data-act="pdf" data-k="levels">📄 PDF</button>
+    </div>
+    <div class="stats">${LEVELS.filter(l => per[l]).map(l => `<div class="stat"><b>${per[l]}</b><span class="lv">${l}</span></div>`).join('')}${none ? `<div class="stat w"><b>${none}</b><span>لم يحدد</span></div>` : ''}</div>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>اسم الطالب</th><th>التليفون</th><th>نوع الاشتراك</th><th>المستوى</th></tr></thead>
+      <tbody>${list.length ? list.map(([id, s], i) => `<tr>
+        <td class="n">${i + 1}</td><td><b>${esc(s.name)}</b></td><td>${phoneHtml(s.phone)}</td><td>${typeTag(typeOf(s))}</td>
+        <td><select class="inp" style="direction:ltr;font-weight:800;${s.level ? '' : 'border-color:#fcd34d;background:#fffbeb'}" data-chg="setLevel" data-id="${id}">
+          <option value="">— اختار المستوى —</option>${LEVELS.map(l => `<option ${s.level === l ? 'selected' : ''}>${l}</option>`).join('')}</select></td>
+      </tr>`).join('') : `<tr><td colspan="5" class="empty">${S.noLevel ? 'كل الطلاب اتحدد مستواهم 👍' : 'لسه مفيش مشتركين.'}</td></tr>`}</tbody>
+    </table></div>`;
+}
+
+/* --- groups tab --- */
+function tabGroups(){
+  const sm = studentGroupMap();
+  const all = students();
+  const noLevel = all.filter(([, s]) => !s.level);
+  const ungrouped = all.filter(([id, s]) => s.level && !sm[id]);
+  const mismatched = all.filter(([id, s]) => { const g = sm[id] && S.rd.groups[sm[id]]; return g && (g.level !== s.level || g.type !== typeOf(s)); });
+  const gl = groupsList();
+  const incCount = gl.filter(([, g]) => groupStatus(g).inc).length;
+  const waDone = gl.filter(([, g]) => g.waCreated).length;
+  const teachers = Object.entries(S.rd.teachers);
+
+  const byLevel = {};
+  gl.forEach(([gid, g]) => { ((byLevel[g.level] = byLevel[g.level] || {})[g.type] = byLevel[g.level][g.type] || []).push([gid, g]); });
+
+  const card = (gid, g) => {
+    const ids = validIds(g), stt = groupStatus(g);
+    const same = gl.filter(([oid, o]) => oid !== gid && o.level === g.level && o.type === g.type);
+    return `<div class="gcard ${stt.inc ? 'inc' : ''} ${g.waCreated ? 'wa' : ''}">
+      <div class="ghead">
+        <span class="gname">${esc(groupName(g))}</span>
+        <span class="cnt">${ids.length} / ${capOf(g.type)}</span>
+        <span class="${stt.cls}" style="font-weight:800;font-size:13px">${stt.txt}</span>
+        <button class="watg ${g.waCreated ? 'on' : ''}" data-act="waGroup" data-id="${gid}">${g.waCreated ? '✓ جروب الواتساب اتعمل' : '◻ لسه جروب الواتساب'}</button>
+      </div>
+      <div class="gbody">${ids.length ? ids.map(sid => { const s = S.rd.students[sid]; const mm = s.level !== g.level || typeOf(s) !== g.type; return `
+        <div class="gst">
+          <span class="nm">${esc(s.name)}${mm ? ' <span class="tag" style="background:var(--redbg);color:var(--red)">مستواه/نوعه اتغير</span>' : ''}<small class="phone">${esc(s.phone || '')}</small></span>
+          <button class="wck ${s.waAdded ? 'on' : ''}" data-act="waStudent" data-id="${sid}">${s.waAdded ? '✓ اتضاف واتساب' : 'لسه مااتضافش'}</button>
+          <select class="mini" data-chg="moveStudent" data-id="${sid}" data-from="${gid}" title="نقل">
+            <option value="">نقل…</option>${same.map(([oid, o]) => `<option value="${oid}">${esc(groupName(o))} (${validIds(o).length})</option>`).join('')}
+            <option value="__new">جروب جديد</option><option value="__out">شيله من الجروب</option></select>
+        </div>`; }).join('') : '<div class="empty" style="padding:10px">الجروب فاضي</div>'}</div>
+      <div class="gfoot">👩‍🏫 المدرس:
+        <select class="mini" style="max-width:none;flex:1" data-chg="setTeacher" data-id="${gid}">
+          <option value="">— مش متحدد —</option>${teachers.map(([tid, t]) => `<option value="${tid}" ${g.teacherId === tid ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}
+        </select>
+        <button class="ibtn" title="حذف الجروب" data-act="delGroup" data-id="${gid}">🗑️</button>
+      </div>
+    </div>`;
+  };
+
+  return `<div class="bar">
+      <button class="btn p" data-act="distribute">⚡ وزّع الطلاب على الجروبات</button>
+      <button class="btn" data-act="redistribute">🔄 إعادة توزيع كامل</button>
+      <span class="sp"></span><button class="btn pdf" data-act="pdf" data-k="groups">📄 PDF</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>${gl.length}</b><span>جروب</span></div>
+      <div class="stat"><b>${gl.length - incCount}</b><span>مكتمل</span></div>
+      <div class="stat ${incCount ? 'w' : ''}"><b>${incCount}</b><span>مش مكتمل</span></div>
+      <div class="stat"><b>${waDone} / ${gl.length}</b><span>جروبات واتساب اتعملت</span></div>
+      <div class="stat"><b>${all.filter(([, s]) => s.waAdded).length} / ${all.length}</b><span>طلاب اتضافوا واتساب</span></div>
+    </div>
+    ${noLevel.length ? `<div class="alert w">⚠️ في ${noLevel.length} طالب لسه مستواهم مش متحدد، ومش هيدخلوا التوزيع. <a href="#/round/${S.rid}/levels">حدد مستواهم من هنا</a></div>` : ''}
+    ${ungrouped.length ? `<div class="alert w">🆕 في ${ungrouped.length} طالب مستواهم متحدد بس لسه مش في جروب: ${ungrouped.slice(0, 8).map(([, s]) => esc(s.name)).join('، ')}${ungrouped.length > 8 ? '…' : ''}. دوس <b>"وزّع الطلاب على الجروبات"</b> وهيتحطوا في الجروبات الناقصة الأول.</div>` : ''}
+    ${mismatched.length ? `<div class="alert w">↔️ في ${mismatched.length} طالب اتغير مستواهم أو نوع اشتراكهم بعد التوزيع. دوس "وزّع" وهيتنقلوا للجروب الصح.</div>` : ''}
+    ${!gl.length ? `<div class="card empty"><div style="font-size:40px">👥</div><h3>لسه مفيش جروبات</h3><p>حدد مستويات الطلاب، وبعدين دوس "وزّع الطلاب على الجروبات".<br>البرايفت هيبقى كل طالب لوحده، والسيمي برايفت لوحدهم، والجروبات هتتقسم من ${S.settings.groupMin} لـ ${S.settings.groupMax}.</p></div>` : ''}
+    ${LEVELS.concat(Object.keys(byLevel).filter(l => !LEVELS.includes(l))).filter(l => byLevel[l]).map(l => `
+      <div class="lvsec"><h2><span class="lv" style="font-size:18px">${esc(l)}</span> <small style="color:var(--mut);font-size:14px">${Object.values(byLevel[l]).flat().reduce((a, [, g]) => a + validIds(g).length, 0)} طالب</small></h2>
+      ${TYPE_ORDER.filter(t => byLevel[l][t]).map(t => `<div class="tysec"><h4>${typeTag(t)} · ${byLevel[l][t].length} ${t === 'private' ? 'طالب' : 'جروب'}</h4>
+        <div class="ggrid">${byLevel[l][t].map(([gid, g]) => card(gid, g)).join('')}</div></div>`).join('')}
+      </div>`).join('')}`;
+}
+
+/* --- teachers tab --- */
+function tabTeachers(){
+  const ts = Object.entries(S.rd.teachers).sort((a, b) => (a[1].createdAt || 0) - (b[1].createdAt || 0));
+  const unassigned = groupsList().filter(([, g]) => !g.teacherId || !S.rd.teachers[g.teacherId]);
+  let tg = 0, tst = 0, tsal = 0;
+  const rows = ts.map(([id, t], i) => {
+    const c = teacherCalc(id); tg += c.groupsCount; tst += c.studentsCount; tsal += c.salary;
+    return `<tr><td class="n">${i + 1}</td><td><b>${esc(t.name)}</b></td><td>${phoneHtml(t.phone)}</td>
+      <td style="font-size:13px">${c.groups.map(([, g]) => `<span class="tag t-${g.type}" style="margin:1px">${esc(groupName(g))}</span>`).join(' ') || '<span style="color:var(--mut)">—</span>'}</td>
+      <td><b>${c.groupsCount}</b></td><td><b>${c.studentsCount}</b></td>
+      <td><b>${money(c.salary)}</b><br><small style="color:var(--mut)">${salNote(t, c)}</small></td>
+      <td><button class="wck ${t.paid ? 'on' : ''}" data-act="teacherPaid" data-id="${id}">${t.paid ? '✓ اتصرف' : 'لسه'}</button></td>
+      <td style="white-space:nowrap"><button class="ibtn" data-act="editTeacher" data-id="${id}">✏️</button><button class="ibtn" data-act="delTeacher" data-id="${id}">🗑️</button></td></tr>`;
+  }).join('');
+  return `<div class="bar"><button class="btn p" data-act="addTeacher">＋ إضافة مدرس</button><span class="sp"></span><button class="btn pdf" data-act="pdf" data-k="teachers">📄 PDF</button></div>
+    ${unassigned.length ? `<div class="alert w">⚠️ في ${unassigned.length} جروب لسه مالهمش مدرس. تقدر تحدد المدرس من تعديل المدرس، أو من تحت كل جروب في صفحة الجروبات.</div>` : ''}
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>المدرس</th><th>التليفون</th><th>الجروبات</th><th>عدد الجروبات</th><th>عدد الطلاب</th><th>المرتب في الراوند</th><th>الصرف</th><th></th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="9" class="empty">لسه مفيش مدرسين في الراوند ده.</td></tr>`}</tbody>
+      ${ts.length ? `<tfoot><tr><td></td><td>${ts.length} مدرس</td><td></td><td></td><td>${tg}</td><td>${tst}</td><td>${money(tsal)}</td><td colspan="2"></td></tr></tfoot>` : ''}
+    </table></div>`;
+}
+
+/* --- finance tab --- */
+function tabFinance(){
+  const f = finance();
+  const st = Object.values(S.rd.students);
+  const byType = TYPE_ORDER.map(t => { const l = st.filter(s => typeOf(s) === t); return [t, l.length, l.reduce((a, s) => a + num(s.paid), 0)]; });
+  const byLvl = {}; st.forEach(s => { const k = s.level || 'لم يحدد'; byLvl[k] = byLvl[k] || [0, 0]; byLvl[k][0]++; byLvl[k][1] += num(s.paid); });
+  const ex = Object.entries(S.rd.expenses).sort((a, b) => (a[1].createdAt || 0) - (b[1].createdAt || 0));
+  return `<div class="bar"><span class="sp"></span><button class="btn pdf" data-act="pdf" data-k="finance">📄 PDF</button></div>
+    <div class="fin">
+      <div class="card"><span>إجمالي الدخل (المدفوع)</span><b style="color:var(--g)">${money(f.income)}</b></div>
+      <div class="card"><span>مرتبات المدرسين</span><b style="color:var(--blue)">${money(f.salaries)}</b><span>اتصرف منها ${money(f.paidSal)}</span></div>
+      <div class="card"><span>مصروفات تانية</span><b style="color:var(--warn)">${money(f.expenses)}</b></div>
+      <div class="card" style="border-color:${f.net < 0 ? '#fecaca' : '#86efac'}"><span>الصافي</span><b style="color:${f.net < 0 ? 'var(--red)' : 'var(--g)'}">${money(f.net)}</b></div>
+    </div>
+    <div class="two">
+      <div><h3>الدخل حسب نوع الاشتراك</h3><div class="tw"><table><thead><tr><th>النوع</th><th>عدد الطلاب</th><th>المبلغ</th></tr></thead>
+        <tbody>${byType.map(([t, c, a]) => `<tr><td>${typeTag(t)}</td><td>${c}</td><td><b>${money(a)}</b></td></tr>`).join('')}</tbody></table></div>
+        <h3 style="margin-top:16px">الدخل حسب المستوى</h3><div class="tw"><table><thead><tr><th>المستوى</th><th>عدد الطلاب</th><th>المبلغ</th></tr></thead>
+        <tbody>${Object.entries(byLvl).sort((a, b) => lvlIdx(a[0]) - lvlIdx(b[0])).map(([l, [c, a]]) => `<tr><td><span class="lv">${esc(l)}</span></td><td>${c}</td><td><b>${money(a)}</b></td></tr>`).join('') || '<tr><td colspan="3" class="empty">—</td></tr>'}</tbody></table></div>
+      </div>
+      <div><h3>مرتبات المدرسين</h3><div class="tw"><table><thead><tr><th>المدرس</th><th>جروبات</th><th>طلاب</th><th>المرتب</th><th>الصرف</th></tr></thead>
+        <tbody>${Object.entries(S.rd.teachers).map(([id, t]) => { const c = teacherCalc(id); return `<tr><td><b>${esc(t.name)}</b></td><td>${c.groupsCount}</td><td>${c.studentsCount}</td><td><b>${money(c.salary)}</b></td><td>${t.paid ? '✓ اتصرف' : 'لسه'}</td></tr>`; }).join('') || '<tr><td colspan="5" class="empty">مفيش مدرسين</td></tr>'}</tbody></table></div>
+        <h3 style="margin-top:16px;display:flex;align-items:center;gap:8px">مصروفات تانية <button class="btn s" data-act="addExpense">＋ إضافة مصروف</button></h3>
+        <div class="tw"><table><thead><tr><th>البند</th><th>المبلغ</th><th></th></tr></thead>
+        <tbody>${ex.map(([id, e]) => `<tr><td>${esc(e.desc)}</td><td><b>${money(e.amount)}</b></td><td><button class="ibtn" data-act="delExpense" data-id="${id}">🗑️</button></td></tr>`).join('') || '<tr><td colspan="3" class="empty">مفيش مصروفات (إيجار، إعلانات…)</td></tr>'}</tbody></table></div>
+      </div>
+    </div>`;
+}
+
+/* --- multi-level tab --- */
+function progressOf(s){ const n = Math.max(1, num(s.levelsCount) || 1); const p = Array.isArray(s.progress) ? s.progress : []; return Array.from({length:n}, (_, i) => p[i] || {done:false, level:''}); }
+function tabMulti(){
+  const list = students().filter(([, s]) => num(s.levelsCount) > 1);
+  return `<div class="alert i">الطلاب اللي حاجزين أكتر من مستوى. علّم ✓ على كل مستوى يخلّصه، وهيتسجل معاه المستوى اللي كان فيه. ولما الراوند يخلص، انقله للراوند الجاي وهيتنقل معاه اللي أخده واللي متبقي له.</div>
+    <div class="bar"><span class="sp"></span><button class="btn pdf" data-act="pdf" data-k="multi">📄 PDF</button></div>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>اسم الطالب</th><th>التليفون</th><th>المستوى الحالي</th><th>حاجز</th><th>المستويات (علّم اللي خلصه)</th><th>أخد</th><th>متبقي</th><th></th></tr></thead>
+      <tbody>${list.length ? list.map(([id, s], i) => {
+        const p = progressOf(s), done = p.filter(x => x.done).length, n = p.length;
+        return `<tr><td class="n">${i + 1}</td><td><b>${esc(s.name)}</b>${s.carriedFrom ? `<br><small style="color:var(--mut)">منقول من ${esc(s.carriedFrom)}</small>` : ''}</td><td>${phoneHtml(s.phone)}</td><td>${lvTag(s.level)}</td>
+          <td><b>${n}</b> مستويات</td>
+          <td><div class="prog">${p.map((x, k) => `<label class="pchk ${x.done ? 'on' : ''}"><input type="checkbox" data-chg="prog" data-id="${id}" data-k="${k}" ${x.done ? 'checked' : ''}>${x.done ? '✓' : '◻'} مستوى ${k + 1}${x.level ? ` <span class="lv" style="padding:0 6px;font-size:11px">${esc(x.level)}</span>` : ''}</label>`).join('')}</div>
+            <div class="bar-p" style="margin-top:6px"><i style="width:${Math.round(done / n * 100)}%"></i></div></td>
+          <td><b style="color:var(--g)">${done}</b></td><td><b style="color:${n - done ? 'var(--warn)' : 'var(--g)'}">${n - done}</b></td>
+          <td><button class="btn s" data-act="carry" data-id="${id}" ${n - done ? '' : 'disabled'}>↪ انقله لراوند</button></td></tr>`;
+      }).join('') : `<tr><td colspan="9" class="empty">مفيش طلاب حاجزين أكتر من مستوى في الراوند ده.<br>(من إضافة مشترك اكتب "عدد المستويات" 2 أو أكتر)</td></tr>`}</tbody>
+    </table></div>`;
+}
+
+/* --- admins & settings --- */
+function viewAdmins(){
+  const list = Object.entries(S.admins);
+  return `<h1 class="page">👥 الأدمنز</h1>
+    <div class="alert i">ضيف إيميل الـ Gmail بتاع الأدمن، وهو يدخل على نفس اللينك بـ "الدخول بحساب Google". أي حساب مش في القائمة دي مش هيقدر يشوف ولا يعدّل أي حاجة، حتى لو معاه اللينك. القواعد دي متطبقة على السيرفر نفسه.</div>
+    <div class="card" style="margin-bottom:14px"><div class="fg">
+      <div class="f"><label>إيميل الأدمن (Gmail)</label><input id="aEmail" class="inp phone" style="text-align:left" placeholder="name@gmail.com"></div>
+      <div class="f"><label>الاسم</label><input id="aName" class="inp" placeholder="اسم الأدمن"></div>
+    </div><div class="mact" style="justify-content:flex-start"><button class="btn p" data-act="addAdmin">＋ إضافة أدمن</button></div></div>
+    <div class="tw"><table><thead><tr><th>#</th><th>الاسم</th><th>الإيميل</th><th>الصلاحية</th><th></th></tr></thead><tbody>
+      <tr><td class="n">★</td><td><b>${esc(S.user.name)}</b></td><td class="phone">${esc(OWNER_EMAIL)}</td><td><span class="tag t-private">المالك</span></td><td></td></tr>
+      ${list.map(([em, a], i) => `<tr><td class="n">${i + 1}</td><td><b>${esc(a.name)}</b></td><td class="phone">${esc(em)}</td><td><span class="tag t-group">أدمن</span></td><td><button class="btn s d" data-act="delAdmin" data-id="${esc(em)}">إزالة</button></td></tr>`).join('')}
+    </tbody></table></div>`;
+}
+function viewSettings(){
+  const s = S.settings;
+  return `<h1 class="page">⚙️ الإعدادات</h1><div class="card" style="max-width:640px"><div class="fg">
+    <div class="f full"><label>اسم الأكاديمية (بيظهر فوق وفي ملفات الـ PDF)</label><input id="sName" class="inp" value="${esc(s.academyName)}"></div>
+    <div class="f full"><label>رابط اللوجو (سيبه logo.png وحط صورة اللوجو جنب الملف بنفس الاسم)</label><input id="sLogo" class="inp phone" style="text-align:left" value="${esc(s.logoUrl || '')}"></div>
+    <div class="f"><label>العملة</label><input id="sCur" class="inp" value="${esc(s.currency)}" list="curs"><datalist id="curs"><option>ج.م</option><option>ر.س</option><option>$</option><option>د.إ</option><option>د.ك</option></datalist></div>
+    <div class="f"><label>كود الدولة للواتساب (مصر 20 – السعودية 966)</label><input id="sCC" class="inp" value="${esc(s.countryCode)}"></div>
+    <div class="f"><label>أقل عدد للجروب العادي</label><input id="sMin" type="number" class="inp" value="${esc(s.groupMin)}"></div>
+    <div class="f"><label>أقصى عدد للجروب العادي</label><input id="sMax" type="number" class="inp" value="${esc(s.groupMax)}"></div>
+    <div class="f"><label>أقصى عدد لجروب السيمي برايفت</label><input id="sSemi" type="number" class="inp" value="${esc(s.semiMax)}"></div>
+  </div><div class="mact"><button class="btn p" data-act="saveSettings">💾 حفظ</button></div></div>
+  ${DB.mode === 'firebase' ? `<div class="card" style="max-width:640px;margin-top:14px"><h3>🔒 باسورد النظام</h3>
+    <p style="color:var(--mut);margin-top:0">باسورد تانية غير الـ Gmail، والتحقق منها بيتم على سيرفر Google. أي حد هيدخل لازم يكتبها كل 12 ساعة.</p>
+    <div class="fg">
+      <div class="f"><label>باسورد جديدة ليك (المالك)</label><input id="gOwn1" type="password" class="inp" autocomplete="new-password"></div>
+      <div class="f"><label>تأكيدها</label><input id="gOwn2" type="password" class="inp" autocomplete="new-password"></div>
+    </div><div class="mact" style="justify-content:flex-start"><button class="btn" data-act="changeGate" data-role="owner">تغيير باسورد المالك</button></div>
+    <div class="fg" style="margin-top:14px">
+      <div class="f"><label>باسورد الأدمنز (واحدة لكل الأدمنز)</label><input id="gStf1" type="password" class="inp" autocomplete="new-password"></div>
+      <div class="f"><label>تأكيدها</label><input id="gStf2" type="password" class="inp" autocomplete="new-password"></div>
+    </div><div class="mact" style="justify-content:flex-start"><button class="btn" data-act="changeGate" data-role="staff">حفظ باسورد الأدمنز</button></div>
+    <p style="color:var(--mut);font-size:13px">ادّي باسورد الأدمنز للأدمنز بنفسك، وغيّرها لما أي أدمن يمشي.</p>
+  </div>` : ''}
+  <div class="card" style="max-width:640px;margin-top:14px"><h3>نسخة احتياطية</h3><p style="color:var(--mut);margin-top:0">تنزيل كل بيانات الراوندات في ملف واحد علشان تحتفظ بيه.</p><button class="btn" data-act="backup">⬇️ تنزيل نسخة احتياطية</button></div>`;
+}
+
+/* ---------- modals ---------- */
+let modalSubmit = null;
+function openModal(html, onSubmit){
+  modalSubmit = onSubmit;
+  $('#modal').innerHTML = `<div class="mbox">${html}<div class="mact"><button class="btn" data-act="closeModal">إلغاء</button><button class="btn p" data-act="submitModal">💾 حفظ</button></div></div>`;
+  $('#modal').classList.remove('hidden');
+  setTimeout(() => { const f = $('#modal input:not([type=radio]):not([type=checkbox]), #modal select'); f && f.focus(); }, 30);
+}
+function closeModal(){ $('#modal').classList.add('hidden'); $('#modal').innerHTML = ''; modalSubmit = null; }
+const mv = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+function roundModal(id){
+  const r = id ? S.rounds[id] : null;
+  const next = Math.max(0, ...Object.values(S.rounds).map(x => num(x.number))) + 1;
+  openModal(`<h3>${r ? 'تعديل الراوند' : 'إضافة راوند جديد'}</h3><div class="fg">
+    <div class="f"><label>رقم الراوند *</label><input id="mNum" type="number" class="inp" value="${esc(r ? r.number : next)}"></div>
+    <div class="f"><label>تاريخ البداية</label><input id="mDate" type="date" class="inp" value="${esc(r?.startDate || '')}"></div>
+    <div class="f full"><label>اسم/وصف (اختياري)</label><input id="mName" class="inp" value="${esc(r?.name || '')}" placeholder="مثال: راوند يناير"></div>
+    <div class="f full"><label>ملاحظات</label><textarea id="mNotes" class="inp" rows="2">${esc(r?.notes || '')}</textarea></div>
+  </div>`, async () => {
+    const number = num(mv('mNum')); if (!number){ toast('اكتب رقم الراوند', 'err'); return false; }
+    if (Object.entries(S.rounds).some(([rid, x]) => rid !== id && num(x.number) === number)){ toast('في راوند بنفس الرقم ده', 'err'); return false; }
+    const data = {number, startDate: mv('mDate'), name: mv('mName'), notes: mv('mNotes')};
+    if (id) await DB.set('rounds', id, data);
+    else { const nid = await DB.add('rounds', {...data, createdAt: Date.now(), stats:{students:0, income:0, groups:0}}); go('#/round/' + nid); }
+    toast('اتحفظ ✓');
+  });
+}
+function studentModal(id){
+  const s = id ? S.rd.students[id] : {type:'group', levelsCount:1};
+  openModal(`<h3>${id ? 'تعديل بيانات المشترك' : 'إضافة مشترك جديد'}</h3><div class="fg">
+    <div class="f full"><label>اسم الطالب *</label><input id="mName" class="inp" value="${esc(s.name || '')}"></div>
+    <div class="f"><label>رقم التليفون</label><input id="mPhone" class="inp phone" style="text-align:left" inputmode="tel" value="${esc(s.phone || '')}" placeholder="01xxxxxxxxx"></div>
+    <div class="f"><label>المبلغ اللي دفعه (${esc(S.settings.currency)})</label><input id="mPaid" class="inp" inputmode="decimal" value="${esc(s.paid ?? '')}" placeholder="0"></div>
+    <div class="f full"><label>نوع الاشتراك</label><div class="radios">${TYPE_ORDER.map(t => `<label><input type="radio" name="mType" value="${t}" ${typeOf(s) === t ? 'checked' : ''}><span>${typeLabel(t)}</span></label>`).join('')}</div></div>
+    <div class="f"><label>عدد المستويات المشترك فيها</label><input id="mLv" type="number" min="1" max="12" class="inp" value="${esc(num(s.levelsCount) || 1)}"></div>
+    <div class="f"><label>المستوى (ممكن تحدده بعدين)</label><select id="mLevel" class="inp" style="direction:ltr"><option value="">— لم يحدد —</option>${LEVELS.map(l => `<option ${s.level === l ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    <div class="f full"><label>ملاحظات</label><input id="mNotes" class="inp" value="${esc(s.notes || '')}"></div>
+  </div>`, async () => {
+    const name = mv('mName'); if (!name){ toast('اكتب اسم الطالب', 'err'); return false; }
+    const phone = toEn(mv('mPhone'));
+    if (phone && students().some(([sid, x]) => sid !== id && toEn(x.phone) === phone) && !confirm('رقم التليفون ده متسجل لطالب تاني في نفس الراوند. تكمل؟')) return false;
+    const data = {name, phone, paid: num(mv('mPaid')), type: (document.querySelector('input[name=mType]:checked') || {}).value || 'group',
+      levelsCount: Math.max(1, Math.round(num(mv('mLv'))) || 1), level: mv('mLevel'), notes: mv('mNotes')};
+    if (id) await DB.set(P('students'), id, data);
+    else await DB.add(P('students'), {...data, waAdded:false, progress:[], createdAt: Date.now()});
+    toast(id ? 'اتعدل ✓' : 'اتضاف ✓ ونزل في تحديد المستوى');
+    if (!id) return 'again';
+  });
+}
+function teacherModal(id){
+  const t = id ? S.rd.teachers[id] : {mode:'fixed'};
+  const gl = groupsList();
+  openModal(`<h3>${id ? 'تعديل المدرس' : 'إضافة مدرس'}</h3><div class="fg">
+    <div class="f"><label>اسم المدرس *</label><input id="mName" class="inp" value="${esc(t.name || '')}"></div>
+    <div class="f"><label>التليفون</label><input id="mPhone" class="inp phone" style="text-align:left" value="${esc(t.phone || '')}"></div>
+    <div class="f full"><label>طريقة حساب المرتب</label><div class="radios">${Object.entries(SAL_MODES).map(([k, l]) => `<label><input type="radio" name="mMode" value="${k}" ${(t.mode || 'fixed') === k ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div></div>
+    <div class="f" id="wHours"><label>عدد الساعات في الراوند</label><input id="mHours" class="inp" inputmode="decimal" value="${esc(t.hours ?? '')}" placeholder="مثال: 24"></div>
+    <div class="f"><label id="lAmt">المبلغ</label><input id="mAmt" class="inp" inputmode="decimal" value="${esc(t.amount ?? '')}"></div>
+    <div class="f full"><div class="alert ok" id="salPrev" style="margin:0"></div></div>
+    <div class="f full"><label>الجروبات اللي ماسكها</label><div class="chklist">${gl.length ? gl.map(([gid, g]) => `<label><input type="checkbox" class="mG" value="${gid}" ${id && g.teacherId === id ? 'checked' : ''}> ${esc(groupName(g))} <small style="color:var(--mut)">(${validIds(g).length} طالب${g.teacherId && g.teacherId !== id && S.rd.teachers[g.teacherId] ? ' · مع ' + esc(S.rd.teachers[g.teacherId].name) : ''})</small></label>`).join('') : '<span style="color:var(--mut)">لسه مفيش جروبات. وزّع الطلاب الأول.</span>'}</div></div>
+  </div>`, TEACHER_SUBMIT(id, gl));
+  salPreview(id);
+}
+const TEACHER_SUBMIT = (id, gl) => async () => {
+    const name = mv('mName'); if (!name){ toast('اكتب اسم المدرس', 'err'); return false; }
+    const data = {name, phone: mv('mPhone'), mode: (document.querySelector('input[name=mMode]:checked') || {}).value || 'fixed', amount: num(mv('mAmt')), hours: num(mv('mHours'))};
+    const checked = new Set([...document.querySelectorAll('.mG:checked')].map(x => x.value));
+    const tid = id || uid();
+    const ops = [{op:'merge', path:P('teachers'), id:tid, data: id ? data : {...data, paid:false, createdAt: Date.now()}}];
+    gl.forEach(([gid, g]) => {
+      if (checked.has(gid) && g.teacherId !== tid) ops.push({op:'merge', path:P('groups'), id:gid, data:{teacherId: tid}});
+      if (!checked.has(gid) && g.teacherId === tid) ops.push({op:'merge', path:P('groups'), id:gid, data:{teacherId: ''}});
+    });
+    await DB.batch(ops); toast('اتحفظ ✓');
+};
+function salNote(t, c){
+  const m = t.mode || 'fixed', a = fmt(t.amount);
+  if (m === 'hourly') return `${fmt(t.hours)} ساعة × ${a}`;
+  if (m === 'perGroup') return `${c.groupsCount} جروب × ${a}`;
+  if (m === 'perStudent') return `${c.studentsCount} طالب × ${a}`;
+  return SAL_SHORT.fixed;
+}
+function salPreview(id){
+  const box = document.getElementById('salPrev'); if (!box) return;
+  const m = (document.querySelector('input[name=mMode]:checked') || {}).value || 'fixed';
+  const amt = num(mv('mAmt')), hrs = num(mv('mHours'));
+  const tid = id || '__new';
+  const checked = new Set([...document.querySelectorAll('.mG:checked')].map(x => x.value));
+  const gs = groupsList().filter(([gid]) => checked.has(gid));
+  const sc = gs.reduce((a, [, g]) => a + validIds(g).length, 0);
+  document.getElementById('wHours').style.display = m === 'hourly' ? '' : 'none';
+  document.getElementById('lAmt').textContent = ({fixed:'المرتب', hourly:'سعر الساعة', perGroup:'سعر الجروب الواحد', perStudent:'سعر الطالب الواحد'})[m] + ` (${S.settings.currency})`;
+  const sal = m === 'hourly' ? amt * hrs : m === 'perGroup' ? amt * gs.length : m === 'perStudent' ? amt * sc : amt;
+  const how = m === 'hourly' ? `${fmt(hrs)} ساعة × ${fmt(amt)}` : m === 'perGroup' ? `${gs.length} جروب × ${fmt(amt)}` : m === 'perStudent' ? `${sc} طالب × ${fmt(amt)}` : 'مبلغ ثابت';
+  box.innerHTML = `💰 المرتب: <b>${money(sal)}</b> <small>(${how}) · ${gs.length} جروب · ${sc} طالب</small>`;
+}
+document.addEventListener('input', e => { if (e.target.closest('#modal') && document.getElementById('salPrev')) salPreview(); });
+document.addEventListener('change', e => { if (e.target.closest('#modal') && document.getElementById('salPrev')) salPreview(); });
+function expenseModal(){
+  openModal(`<h3>إضافة مصروف</h3><div class="fg">
+    <div class="f"><label>البند</label><input id="mDesc" class="inp" placeholder="مثال: إعلانات"></div>
+    <div class="f"><label>المبلغ (${esc(S.settings.currency)})</label><input id="mAmt" class="inp" inputmode="decimal"></div></div>`, async () => {
+    const desc = mv('mDesc'), amount = num(mv('mAmt'));
+    if (!desc || !amount){ toast('اكتب البند والمبلغ', 'err'); return false; }
+    await DB.add(P('expenses'), {desc, amount, createdAt: Date.now()}); toast('اتضاف ✓');
+  });
+}
+function carryModal(sid){
+  const s = S.rd.students[sid];
+  const others = Object.entries(S.rounds).filter(([id]) => id !== S.rid).sort((a, b) => num(b[1].number) - num(a[1].number));
+  if (!others.length){ toast('اعمل الراوند الجديد الأول وبعدين انقله', 'err'); return; }
+  const p = progressOf(s), done = p.filter(x => x.done).length;
+  openModal(`<h3>نقل "${esc(s.name)}" لراوند تاني</h3>
+    <p>أخد ${done} من ${p.length} مستويات، ومتبقي له ${p.length - done}. هيتنقل بنفس الاسم والتليفون ونوع الاشتراك وعدد المستويات واللي أخده، والمدفوع هيتسجل صفر (لأنه دافع في الراوند ده).</p>
+    <div class="f"><label>الراوند</label><select id="mR" class="inp">${others.map(([id, r]) => `<option value="${id}">${esc(roundTitle(r))}</option>`).join('')}</select></div>`, async () => {
+    const target = mv('mR');
+    const existing = await DB.getAll(`rounds/${target}/students`);
+    if (Object.values(existing).some(x => x.linkId && x.linkId === (s.linkId || sid))){ toast('الطالب ده متنقل للراوند ده قبل كده', 'err'); return false; }
+    await DB.add(`rounds/${target}/students`, {
+      name: s.name, phone: s.phone || '', paid: 0, type: typeOf(s), levelsCount: num(s.levelsCount), level: '', notes: s.notes || '',
+      progress: p, waAdded: false, carriedFrom: roundTitle(S.rounds[S.rid]), linkId: s.linkId || sid, createdAt: Date.now()
+    });
+    await DB.set(P('students'), sid, {linkId: s.linkId || sid});
+    toast('اتنقل ✓ وهتلاقيه في تحديد المستوى في الراوند الجديد');
+  });
+}
+
+/* ---------- group distribution ---------- */
+function evenSizes(total, n){ const b = Math.floor(total / n), e = total % n; return Array.from({length:n}, (_, i) => b + (i < e ? 1 : 0)); }
+async function distribute(full){
+  const st = S.rd.students;
+  const ops = [];
+  let groups = full ? {} : clone(S.rd.groups);
+  if (full) Object.keys(S.rd.groups).forEach(id => ops.push({op:'del', path:P('groups'), id}));
+  const oldTeacher = {};
+  if (full) Object.values(S.rd.groups).forEach(g => { if (g.teacherId) oldTeacher[g.level + '|' + g.type + '|' + g.num] = g.teacherId; });
+  for (const g of Object.values(groups)){
+    const before = g.studentIds || [];
+    g.studentIds = before.filter(sid => st[sid] && st[sid].level === g.level && typeOf(st[sid]) === g.type);
+    if (g.studentIds.length !== before.length) g._dirty = true;
+  }
+  const grouped = new Set(Object.values(groups).flatMap(g => g.studentIds));
+  const buckets = {};
+  students().forEach(([sid, s]) => { if (!s.level || grouped.has(sid)) return; const k = s.level + '|' + typeOf(s); (buckets[k] = buckets[k] || []).push(sid); });
+  let added = 0, created = 0;
+  for (const [k, ids] of Object.entries(buckets)){
+    const [level, type] = k.split('|'); const max = capOf(type);
+    const rest = [...ids]; added += ids.length;
+    const existing = Object.values(groups).filter(g => g.level === level && g.type === type).sort((a, b) => a.studentIds.length - b.studentIds.length || a.num - b.num);
+    if (type !== 'private') for (const g of existing){ while (g.studentIds.length < max && rest.length){ g.studentIds.push(rest.shift()); g._dirty = true; } }
+    if (!rest.length) continue;
+    const n = type === 'private' ? rest.length : Math.ceil(rest.length / max);
+    let nextNum = existing.reduce((m, g) => Math.max(m, g.num || 0), 0) + 1;
+    for (const sz of evenSizes(rest.length, n)){
+      const num_ = nextNum++;
+      groups[uid()] = {level, type, num: num_, studentIds: rest.splice(0, sz), waCreated:false, teacherId: oldTeacher[level + '|' + type + '|' + num_] || '', createdAt: Date.now(), _new:true};
+      created++;
+    }
+  }
+  for (const [gid, g] of Object.entries(groups)){
+    if (!g._new && !g._dirty && !full) continue;
+    const {_new, _dirty, ...data} = g;
+    if (!data.studentIds.length && !_new) ops.push({op:'del', path:P('groups'), id:gid});
+    else ops.push({op:'replace', path:P('groups'), id:gid, data});
+  }
+  if (!ops.length){ toast('كل الطلاب اللي اتحدد مستواهم موزعين بالفعل 👍'); return; }
+  await DB.batch(ops);
+  toast(full ? `اتوزعوا من جديد في ${created} جروب ✓` : `اتوزع ${added} طالب ✓ (${created} جروب جديد)`);
+}
+async function moveStudent(sid, from, to){
+  const ops = [];
+  const gFrom = S.rd.groups[from];
+  ops.push({op:'merge', path:P('groups'), id:from, data:{studentIds: (gFrom.studentIds || []).filter(x => x !== sid)}});
+  if (to === '__new'){
+    const same = Object.values(S.rd.groups).filter(g => g.level === gFrom.level && g.type === gFrom.type);
+    ops.push({op:'replace', path:P('groups'), id:uid(), data:{level:gFrom.level, type:gFrom.type, num: same.reduce((m, g) => Math.max(m, g.num || 0), 0) + 1, studentIds:[sid], waCreated:false, teacherId:'', createdAt:Date.now()}});
+  } else if (to !== '__out'){
+    const gTo = S.rd.groups[to];
+    ops.push({op:'merge', path:P('groups'), id:to, data:{studentIds: [...(gTo.studentIds || []).filter(x => x !== sid), sid]}});
+  }
+  await DB.batch(ops); toast(to === '__out' ? 'اتشال من الجروب' : 'اتنقل ✓');
+}
+
+/* ---------- PDF (print) ---------- */
+function pdfTable(head, rows, foot){
+  return `<table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.length ? rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${head.length}" style="text-align:center">لا يوجد بيانات</td></tr>`}</tbody>${foot ? `<tfoot><tr>${foot.map(c => `<td><b>${c}</b></td>`).join('')}</tr></tfoot>` : ''}</table>`;
+}
+const PDF = {
+  students(){
+    const l = students(); const tot = l.reduce((a, [, s]) => a + num(s.paid), 0);
+    return ['قائمة المشتركين', pdfTable(['#','اسم الطالب','التليفون','نوع الاشتراك','المدفوع','عدد المستويات','المستوى','ملاحظات'],
+      l.map(([, s], i) => [i + 1, esc(s.name), `<span class="phone">${esc(s.phone)}</span>`, TYPES[typeOf(s)], money(s.paid), num(s.levelsCount) || 1, esc(s.level || '—'), esc(s.notes)]),
+      ['', `${l.length} طالب`, '', '', money(tot), '', '', ''])];
+  },
+  levels(){
+    const l = students().slice().sort((a, b) => lvlIdx(a[1].level) - lvlIdx(b[1].level));
+    return ['قائمة تحديد المستوى', pdfTable(['#','اسم الطالب','التليفون','نوع الاشتراك','المستوى'],
+      l.map(([, s], i) => [i + 1, esc(s.name), `<span class="phone">${esc(s.phone)}</span>`, TYPES[typeOf(s)], `<b>${esc(s.level || 'لم يحدد')}</b>`]))];
+  },
+  groups(){
+    const gl = groupsList(); let html = '', lastL = null;
+    if (!gl.length) html = '<p>لا يوجد جروبات.</p>';
+    gl.forEach(([, g]) => {
+      if (g.level !== lastL){ html += `<div class="psec">المستوى ${esc(g.level)}</div>`; lastL = g.level; }
+      const ids = validIds(g), stt = groupStatus(g), t = S.rd.teachers[g.teacherId];
+      html += `<div class="pg"><h4>${esc(groupName(g))} — ${ids.length}/${capOf(g.type)} (${stt.txt}) — المدرس: ${esc(t ? t.name : 'غير محدد')} — جروب الواتساب: ${g.waCreated ? '✓ اتعمل' : 'لسه'}</h4>
+        ${pdfTable(['#','اسم الطالب','التليفون','اتضاف للواتساب'], ids.map((sid, i) => { const s = S.rd.students[sid]; return [i + 1, esc(s.name), `<span class="phone">${esc(s.phone)}</span>`, s.waAdded ? '✓' : '—']; }))}</div>`;
+    });
+    return ['تقسيم الجروبات', html];
+  },
+  teachers(){
+    let tg = 0, ts = 0, tsal = 0;
+    const rows = Object.entries(S.rd.teachers).map(([id, t], i) => { const c = teacherCalc(id); tg += c.groupsCount; ts += c.studentsCount; tsal += c.salary;
+      return [i + 1, esc(t.name), `<span class="phone">${esc(t.phone)}</span>`, c.groups.map(([, g]) => esc(groupName(g))).join('، ') || '—', c.groupsCount, c.studentsCount, money(c.salary), t.paid ? '✓ اتصرف' : 'لسه']; });
+    return ['المدرسين', pdfTable(['#','المدرس','التليفون','الجروبات','عدد الجروبات','عدد الطلاب','المرتب','الصرف'], rows, ['', `${rows.length} مدرس`, '', '', tg, ts, money(tsal), ''])];
+  },
+  finance(){
+    const f = finance(); const st = Object.values(S.rd.students);
+    const byType = TYPE_ORDER.map(t => { const l = st.filter(s => typeOf(s) === t); return [TYPES[t], l.length, money(l.reduce((a, s) => a + num(s.paid), 0))]; });
+    return ['حسابات الراوند', `<div class="psum"><div>إجمالي الدخل: <b>${money(f.income)}</b></div><div>مرتبات المدرسين: <b>${money(f.salaries)}</b></div><div>مصروفات تانية: <b>${money(f.expenses)}</b></div><div>الصافي: <b>${money(f.net)}</b></div></div>
+      <div class="psec">الدخل حسب نوع الاشتراك</div>${pdfTable(['النوع','عدد الطلاب','المبلغ'], byType)}
+      <div class="psec">مرتبات المدرسين</div>${pdfTable(['المدرس','الجروبات','الطلاب','المرتب','الصرف'], Object.entries(S.rd.teachers).map(([id, t]) => { const c = teacherCalc(id); return [esc(t.name), c.groupsCount, c.studentsCount, money(c.salary), t.paid ? '✓' : 'لسه']; }))}
+      <div class="psec">مصروفات تانية</div>${pdfTable(['البند','المبلغ'], Object.values(S.rd.expenses).map(e => [esc(e.desc), money(e.amount)]))}`];
+  },
+  multi(){
+    const l = students().filter(([, s]) => num(s.levelsCount) > 1);
+    return ['الطلاب متعددي المستويات', pdfTable(['#','اسم الطالب','التليفون','المستوى الحالي','حاجز','اللي أخده','أخد','متبقي'],
+      l.map(([, s], i) => { const p = progressOf(s), d = p.filter(x => x.done); return [i + 1, esc(s.name), `<span class="phone">${esc(s.phone)}</span>`, esc(s.level || '—'), p.length, d.map(x => esc(x.level || '✓')).join('، ') || '—', d.length, p.length - d.length]; }))];
+  }
+};
+function doPrint(kind){
+  const r = S.rounds[S.rid];
+  const head = t => `<div class="ph"><div style="display:flex;gap:10px;align-items:center">${S.settings.logoUrl ? `<img src="${esc(S.settings.logoUrl)}" style="height:46px" onerror="this.remove()">` : ''}<div><h1>${esc(S.settings.academyName)}</h1><h2>${esc(t)} — ${esc(roundTitle(r))}</h2></div></div><div class="pdate">تاريخ التنزيل<br>${new Date().toLocaleDateString('ar-EG', {year:'numeric', month:'long', day:'numeric'})}</div></div>`;
+  let html, title;
+  if (kind === 'all'){
+    title = 'تقرير الراوند';
+    html = ['students','levels','groups','teachers','finance','multi'].map((k, i) => { const [t, b] = PDF[k](); return `<div class="${i ? 'pbreak' : ''}">${head(t)}${b}</div>`; }).join('');
+  } else { const [t, b] = PDF[kind](); title = t; html = head(t) + b; }
+  $('#printArea').innerHTML = html + `<div class="pfoot">${esc(S.settings.academyName)} — نظام إدارة الأكاديمية</div>`;
+  const old = document.title; document.title = `${title} - ${roundTitle(r)}`;
+  setTimeout(() => { window.print(); setTimeout(() => { document.title = old; }, 500); }, 50);
+}
+
+/* ---------- demo seed ---------- */
+async function seed(){
+  const first = ['أحمد','محمد','سارة','منة','يوسف','مريم','عمر','نور','خالد','ملك','زياد','هنا','كريم','جنى','مصطفى','فرح','علي','ليلى','حسن','رنا','آدم','سلمى','مازن','دينا','ياسين','هاجر','إياد','روان'];
+  const last = ['محمود','علي','حسن','إبراهيم','سعيد','عادل','فتحي','جمال'];
+  const rid = await DB.add('rounds', {number: 20, name:'راوند تجريبي', startDate: new Date().toISOString().slice(0, 10), notes:'', createdAt: Date.now(), stats:{}});
+  const ops = []; const lv = ['A1','A1','A1','A2','B1','A1','A2','B1','Pre A1'];
+  first.forEach((f, i) => {
+    const type = i % 9 === 0 ? 'private' : i % 7 === 0 ? 'semi' : 'group';
+    ops.push({op:'replace', path:`rounds/${rid}/students`, id:uid(), data:{name: f + ' ' + last[i % last.length], phone: '010' + String(10000000 + i * 734521).slice(0, 8), paid: type === 'private' ? 3000 : type === 'semi' ? 2000 : 1200,
+      type, levelsCount: i % 5 === 0 ? 3 : 1, level: i < 24 ? lv[i % lv.length] : '', notes:'', waAdded: false, progress: [], createdAt: Date.now() + i}});
+  });
+  ops.push({op:'replace', path:`rounds/${rid}/teachers`, id:uid(), data:{name:'Mr. Ahmed', phone:'01011112222', mode:'perGroup', amount:1500, paid:false, createdAt:Date.now()}});
+  ops.push({op:'replace', path:`rounds/${rid}/teachers`, id:uid(), data:{name:'Ms. Sara', phone:'01033334444', mode:'fixed', amount:4000, paid:false, createdAt:Date.now() + 1}});
+  await DB.batch(ops);
+  go('#/round/' + rid + '/levels'); toast('اتضافت بيانات تجريبية ✓');
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act, id = el.dataset.id;
+  if (el.closest('.acts') || a !== 'go') e.stopPropagation();
+  if (a === 'go' && el.closest('.rcard') && e.target.closest('.acts')) return;
+  switch (a){
+    case 'go': go(el.dataset.h); break;
+    case 'home': go('#/'); break;
+    case 'login': { const pr = new DB.au.GoogleAuthProvider(); pr.setCustomParameters({prompt:'select_account'}); safe(() => DB.au.signInWithPopup(DB.auth, pr)); break; }
+    case 'logout': if (DB.mode === 'firebase') { stopAll(); if (S.user && S.user.uid) await DB.closeSession(S.user.uid); S.user = null; await DB.au.signOut(DB.auth); } break;
+    case 'gate': submitGate(el.dataset.mode); break;
+    case 'changeGate': changeGate(el.dataset.role); break;
+    case 'newRound': roundModal(); break;
+    case 'editRound': roundModal(id); break;
+    case 'delRound': {
+      const r = S.rounds[id]; if (!r) break;
+      const typed = prompt(`حذف ${roundTitle(r)} بكل بياناته (المشتركين والجروبات والمدرسين والحسابات)؟\nالحذف مش هيترجع. اكتب رقم الراوند (${r.number}) علشان تأكد:`);
+      if (typed === null || num(typed) !== num(r.number)){ if (typed !== null) toast('الرقم مش مطابق، ماحصلش حذف', 'err'); break; }
+      await safe(async () => {
+        const ops = [];
+        for (const c of ['students','groups','teachers','expenses']){ const all = await DB.getAll(`rounds/${id}/${c}`); Object.keys(all).forEach(x => ops.push({op:'del', path:`rounds/${id}/${c}`, id:x})); }
+        ops.push({op:'del', path:'rounds', id}); await DB.batch(ops);
+      }, 'اتحذف الراوند');
+      break;
+    }
+    case 'addStudent': studentModal(); break;
+    case 'editStudent': studentModal(id); break;
+    case 'delStudent': {
+      const s = S.rd.students[id]; if (!s || !confirm(`حذف "${s.name}" من الراوند؟`)) break;
+      const ops = [{op:'del', path:P('students'), id}];
+      Object.entries(S.rd.groups).forEach(([gid, g]) => { if ((g.studentIds || []).includes(id)) ops.push({op:'merge', path:P('groups'), id:gid, data:{studentIds: g.studentIds.filter(x => x !== id)}}); });
+      safe(() => DB.batch(ops), 'اتحذف'); break;
+    }
+    case 'distribute': safe(() => distribute(false)); break;
+    case 'redistribute': if (confirm('إعادة التوزيع الكامل هتمسح الجروبات الحالية وتقسّم كل الطلاب من الأول بالتساوي، وعلامات جروبات الواتساب هتتمسح.\nتكمل؟')) safe(() => distribute(true)); break;
+    case 'delGroup': if (confirm('حذف الجروب ده؟ الطلاب اللي فيه هيرجعوا "مش موزعين".')) safe(() => DB.del(P('groups'), id), 'اتحذف الجروب'); break;
+    case 'waGroup': { const g = S.rd.groups[id]; safe(() => DB.set(P('groups'), id, {waCreated: !g.waCreated})); break; }
+    case 'waStudent': { const s = S.rd.students[id]; safe(() => DB.set(P('students'), id, {waAdded: !s.waAdded})); break; }
+    case 'addTeacher': teacherModal(); break;
+    case 'editTeacher': teacherModal(id); break;
+    case 'teacherPaid': { const t = S.rd.teachers[id]; safe(() => DB.set(P('teachers'), id, {paid: !t.paid})); break; }
+    case 'delTeacher': {
+      const t = S.rd.teachers[id]; if (!t || !confirm(`حذف المدرس "${t.name}"؟`)) break;
+      const ops = [{op:'del', path:P('teachers'), id}];
+      Object.entries(S.rd.groups).forEach(([gid, g]) => { if (g.teacherId === id) ops.push({op:'merge', path:P('groups'), id:gid, data:{teacherId:''}}); });
+      safe(() => DB.batch(ops), 'اتحذف'); break;
+    }
+    case 'addExpense': expenseModal(); break;
+    case 'delExpense': if (confirm('حذف المصروف ده؟')) safe(() => DB.del(P('expenses'), id)); break;
+    case 'carry': carryModal(id); break;
+    case 'pdf': doPrint(el.dataset.k); break;
+    case 'closeModal': closeModal(); break;
+    case 'submitModal': {
+      if (!modalSubmit) break; el.disabled = true;
+      const fn = modalSubmit;
+      const r = await safe(fn); el.disabled = false;
+      if (r === false) break;
+      if (r === 'again'){ studentModal(); break; }
+      closeModal(); break;
+    }
+    case 'addAdmin': {
+      const em = mv('aEmail').toLowerCase(), nm = mv('aName');
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ toast('اكتب إيميل صحيح', 'err'); break; }
+      if (em === OWNER_EMAIL.toLowerCase()){ toast('ده إيميل المالك', 'err'); break; }
+      safe(() => DB.set('admins', em, {name: nm || em, email: em, addedAt: Date.now()}), 'اتضاف الأدمن ✓'); break;
+    }
+    case 'delAdmin': if (confirm(`إزالة صلاحية ${id}؟`)) safe(() => DB.del('admins', id), 'اتشالت الصلاحية'); break;
+    case 'saveSettings': {
+      const gMin = Math.max(1, Math.round(num(mv('sMin'))) || 7), gMax = Math.max(gMin, Math.round(num(mv('sMax'))) || 8);
+      safe(() => DB.set('meta', 'settings', {settings: {academyName: mv('sName') || DEFAULT_SETTINGS.academyName, logoUrl: mv('sLogo'), currency: mv('sCur'), countryCode: toEn(mv('sCC')).replace(/\D/g, '') || '20', groupMin: gMin, groupMax: gMax, semiMax: Math.max(1, Math.round(num(mv('sSemi'))) || 3)}}), 'اتحفظت الإعدادات ✓');
+      break;
+    }
+    case 'backup': safe(async () => {
+      const out = {exportedAt: new Date().toISOString(), settings: S.settings, rounds: {}};
+      for (const [rid, r] of Object.entries(S.rounds)){ out.rounds[rid] = {...r}; for (const c of ['students','groups','teachers','expenses']) out.rounds[rid][c] = await DB.getAll(`rounds/${rid}/${c}`); }
+      const a2 = document.createElement('a'); a2.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], {type:'application/json'}));
+      a2.download = `academy-backup-${new Date().toISOString().slice(0, 10)}.json`; a2.click();
+    }, 'اتنزلت النسخة ✓'); break;
+    case 'seed': safe(seed); break;
+    case 'resetDemo': if (confirm('مسح كل بيانات التجربة؟')){ DB.reset(); go('#/'); } break;
+  }
+});
+// fix: let round cards open even though the click handler stops propagation for buttons
+document.addEventListener('change', e => {
+  const el = e.target.closest('[data-chg]'); if (!el) return;
+  const c = el.dataset.chg, id = el.dataset.id;
+  if (c === 'fType'){ S.fType = el.value; render(); }
+  else if (c === 'noLevel'){ S.noLevel = el.checked; render(); }
+  else if (c === 'setLevel') safe(() => DB.set(P('students'), id, {level: el.value}), 'اتحفظ المستوى ✓');
+  else if (c === 'setTeacher') safe(() => DB.set(P('groups'), id, {teacherId: el.value}));
+  else if (c === 'moveStudent' && el.value) safe(() => moveStudent(id, el.dataset.from, el.value));
+  else if (c === 'prog'){
+    const s = S.rd.students[id]; const p = progressOf(s); const k = +el.dataset.k;
+    p[k] = {done: el.checked, level: el.checked ? (s.level || p[k].level || '') : ''};
+    safe(() => DB.set(P('students'), id, {progress: p}));
+  }
+});
+document.addEventListener('input', e => { if (e.target.dataset.inp === 'q'){ S.q = e.target.value; render(); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.target.id === 'gp1' || e.target.id === 'gp2')){ const b = document.querySelector('[data-act=gate]'); b && b.click(); return; }
+  if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal();
+  if (e.key === 'Enter' && !$('#modal').classList.contains('hidden') && e.target.tagName === 'INPUT'){ e.preventDefault(); $('#modal [data-act=submitModal]').click(); }
+});
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+boot();
+</script>
+</body>
+</html>
